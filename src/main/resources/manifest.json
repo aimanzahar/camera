@@ -1,0 +1,17 @@
+{
+  "Group": "ModdingHytale",
+  "Name": "RTSCamera",
+  "Version": "1.0.0",
+  "Description": "Dynamic camera system with First Person, Third Person, and RTS modes. Middle-click to cycle modes.",
+  "Authors": [
+    {
+      "Name": "ModdingHytale"
+    }
+  ],
+  "ServerVersion": "*",
+  "Dependencies": {},
+  "OptionalDependencies": {},
+  "DisabledByDefault": false,
+  "Main": "com.moddinghytale.rtscamera.RTSCameraPlugin",
+  "IncludesAssetPack": false
+}

@@ -1,0 +1,7 @@
+{
+  "thirdPersonDistance": 8.0,
+  "rtsDistance": 20.0,
+  "cameraLerpSpeed": 0.2,
+  "clickToMoveEnabled": true,
+  "middleClickCycleEnabled": true
+}
