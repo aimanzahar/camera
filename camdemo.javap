@@ -1,0 +1,489 @@
+Compiled from "CameraDemo.java"
+public class com.hypixel.hytale.server.core.command.commands.player.camera.CameraDemo {
+  public static final com.hypixel.hytale.server.core.command.commands.player.camera.CameraDemo INSTANCE;
+
+  private final com.hypixel.hytale.event.EventRegistry eventRegistry;
+
+  private final com.hypixel.hytale.protocol.ServerCameraSettings cameraSettings;
+
+  private boolean isActive;
+
+  static final boolean $assertionsDisabled;
+
+  public com.hypixel.hytale.server.core.command.commands.player.camera.CameraDemo();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: aload_0
+       5: new           #7                  // class com/hypixel/hytale/event/EventRegistry
+       8: dup
+       9: new           #9                  // class java/util/concurrent/CopyOnWriteArrayList
+      12: dup
+      13: invokespecial #11                 // Method java/util/concurrent/CopyOnWriteArrayList."<init>":()V
+      16: aload_0
+      17: invokedynamic #12,  0             // InvokeDynamic #0:getAsBoolean:(Lcom/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo;)Ljava/util/function/BooleanSupplier;
+      22: ldc           #16                 // String CameraDemo is not active!
+      24: invokestatic  #18                 // Method com/hypixel/hytale/server/core/HytaleServer.get:()Lcom/hypixel/hytale/server/core/HytaleServer;
+      27: invokevirtual #24                 // Method com/hypixel/hytale/server/core/HytaleServer.getEventBus:()Lcom/hypixel/hytale/event/EventBus;
+      30: invokespecial #28                 // Method com/hypixel/hytale/event/EventRegistry."<init>":(Ljava/util/List;Ljava/util/function/BooleanSupplier;Ljava/lang/String;Lcom/hypixel/hytale/event/IEventRegistry;)V
+      33: putfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      36: aload_0
+      37: invokestatic  #37                 // Method createServerCameraSettings:()Lcom/hypixel/hytale/protocol/ServerCameraSettings;
+      40: putfield      #41                 // Field cameraSettings:Lcom/hypixel/hytale/protocol/ServerCameraSettings;
+      43: return
+
+  public void activate();
+    Code:
+       0: aload_0
+       1: getfield      #45                 // Field isActive:Z
+       4: ifeq          8
+       7: return
+       8: aload_0
+       9: getfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      12: invokevirtual #49                 // Method com/hypixel/hytale/event/EventRegistry.enable:()V
+      15: aload_0
+      16: iconst_1
+      17: putfield      #45                 // Field isActive:Z
+      20: aload_0
+      21: getfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      24: ldc           #52                 // class com/hypixel/hytale/server/core/event/events/player/PlayerConnectEvent
+      26: aload_0
+      27: invokedynamic #54,  0             // InvokeDynamic #1:accept:(Lcom/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo;)Ljava/util/function/Consumer;
+      32: invokevirtual #58                 // Method com/hypixel/hytale/event/EventRegistry.register:(Ljava/lang/Class;Ljava/util/function/Consumer;)Lcom/hypixel/hytale/event/EventRegistration;
+      35: pop
+      36: aload_0
+      37: getfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      40: ldc           #62                 // class com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent
+      42: aload_0
+      43: invokedynamic #64,  0             // InvokeDynamic #2:accept:(Lcom/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo;)Ljava/util/function/Consumer;
+      48: invokevirtual #58                 // Method com/hypixel/hytale/event/EventRegistry.register:(Ljava/lang/Class;Ljava/util/function/Consumer;)Lcom/hypixel/hytale/event/EventRegistration;
+      51: pop
+      52: aload_0
+      53: getfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      56: ldc           #65                 // class com/hypixel/hytale/server/core/event/events/player/PlayerInteractEvent
+      58: invokedynamic #67,  0             // InvokeDynamic #3:accept:()Ljava/util/function/Consumer;
+      63: invokevirtual #70                 // Method com/hypixel/hytale/event/EventRegistry.registerGlobal:(Ljava/lang/Class;Ljava/util/function/Consumer;)Lcom/hypixel/hytale/event/EventRegistration;
+      66: pop
+      67: invokestatic  #73                 // Method com/hypixel/hytale/server/core/universe/Universe.get:()Lcom/hypixel/hytale/server/core/universe/Universe;
+      70: invokevirtual #78                 // Method com/hypixel/hytale/server/core/universe/Universe.getPlayers:()Ljava/util/List;
+      73: aload_0
+      74: invokedynamic #82,  0             // InvokeDynamic #4:accept:(Lcom/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo;)Ljava/util/function/Consumer;
+      79: invokeinterface #83,  2           // InterfaceMethod java/util/List.forEach:(Ljava/util/function/Consumer;)V
+      84: return
+
+  public void deactivate();
+    Code:
+       0: aload_0
+       1: getfield      #45                 // Field isActive:Z
+       4: ifne          8
+       7: return
+       8: aload_0
+       9: getfield      #31                 // Field eventRegistry:Lcom/hypixel/hytale/event/EventRegistry;
+      12: invokevirtual #89                 // Method com/hypixel/hytale/event/EventRegistry.shutdown:()V
+      15: invokestatic  #73                 // Method com/hypixel/hytale/server/core/universe/Universe.get:()Lcom/hypixel/hytale/server/core/universe/Universe;
+      18: invokevirtual #78                 // Method com/hypixel/hytale/server/core/universe/Universe.getPlayers:()Ljava/util/List;
+      21: invokedynamic #92,  0             // InvokeDynamic #5:accept:()Ljava/util/function/Consumer;
+      26: invokeinterface #83,  2           // InterfaceMethod java/util/List.forEach:(Ljava/util/function/Consumer;)V
+      31: aload_0
+      32: iconst_0
+      33: putfield      #45                 // Field isActive:Z
+      36: return
+
+  private void onAddNewPlayer(com.hypixel.hytale.server.core.universe.PlayerRef);
+    Code:
+       0: aload_1
+       1: invokevirtual #93                 // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+       4: new           #99                 // class com/hypixel/hytale/protocol/packets/camera/SetServerCamera
+       7: dup
+       8: getstatic     #101                // Field com/hypixel/hytale/protocol/ClientCameraView.Custom:Lcom/hypixel/hytale/protocol/ClientCameraView;
+      11: iconst_1
+      12: aload_0
+      13: getfield      #41                 // Field cameraSettings:Lcom/hypixel/hytale/protocol/ServerCameraSettings;
+      16: invokespecial #107                // Method com/hypixel/hytale/protocol/packets/camera/SetServerCamera."<init>":(Lcom/hypixel/hytale/protocol/ClientCameraView;ZLcom/hypixel/hytale/protocol/ServerCameraSettings;)V
+      19: invokevirtual #110                // Method com/hypixel/hytale/server/core/io/PacketHandler.writeNoCache:(Lcom/hypixel/hytale/protocol/Packet;)V
+      22: return
+
+  private void onPlayerMouseButton(com.hypixel.hytale.server.core.event.events.player.PlayerMouseButtonEvent);
+    Code:
+       0: aload_1
+       1: invokevirtual #116                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getMouseButton:()Lcom/hypixel/hytale/protocol/MouseButtonEvent;
+       4: getfield      #120                // Field com/hypixel/hytale/protocol/MouseButtonEvent.state:Lcom/hypixel/hytale/protocol/MouseButtonState;
+       7: getstatic     #126                // Field com/hypixel/hytale/protocol/MouseButtonState.Released:Lcom/hypixel/hytale/protocol/MouseButtonState;
+      10: if_acmpeq     14
+      13: return
+      14: aload_1
+      15: invokevirtual #131                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getPlayerRef:()Lcom/hypixel/hytale/component/Ref;
+      18: astore_2
+      19: aload_2
+      20: invokevirtual #135                // Method com/hypixel/hytale/component/Ref.isValid:()Z
+      23: ifne          27
+      26: return
+      27: aload_2
+      28: invokevirtual #141                // Method com/hypixel/hytale/component/Ref.getStore:()Lcom/hypixel/hytale/component/Store;
+      31: astore_3
+      32: aload_3
+      33: invokevirtual #145                // Method com/hypixel/hytale/component/Store.getExternalData:()Ljava/lang/Object;
+      36: checkcast     #151                // class com/hypixel/hytale/server/core/universe/world/storage/EntityStore
+      39: invokevirtual #153                // Method com/hypixel/hytale/server/core/universe/world/storage/EntityStore.getWorld:()Lcom/hypixel/hytale/server/core/universe/world/World;
+      42: astore        4
+      44: aload_1
+      45: invokevirtual #157                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getTargetBlock:()Lcom/hypixel/hytale/math/vector/Vector3i;
+      48: astore        5
+      50: aload_3
+      51: aload_2
+      52: invokestatic  #161                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      55: invokevirtual #167                // Method com/hypixel/hytale/component/Store.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      58: checkcast     #162                // class com/hypixel/hytale/server/core/entity/entities/player/CameraManager
+      61: astore        6
+      63: getstatic     #171                // Field $assertionsDisabled:Z
+      66: ifne          82
+      69: aload         6
+      71: ifnonnull     82
+      74: new           #174                // class java/lang/AssertionError
+      77: dup
+      78: invokespecial #176                // Method java/lang/AssertionError."<init>":()V
+      81: athrow
+      82: aload         6
+      84: aload_1
+      85: invokevirtual #116                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getMouseButton:()Lcom/hypixel/hytale/protocol/MouseButtonEvent;
+      88: getfield      #177                // Field com/hypixel/hytale/protocol/MouseButtonEvent.mouseButtonType:Lcom/hypixel/hytale/protocol/MouseButtonType;
+      91: invokevirtual #181                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.getLastMouseButtonPressedPosition:(Lcom/hypixel/hytale/protocol/MouseButtonType;)Lcom/hypixel/hytale/math/vector/Vector3i;
+      94: astore        7
+      96: aload_1
+      97: invokevirtual #116                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getMouseButton:()Lcom/hypixel/hytale/protocol/MouseButtonEvent;
+     100: getfield      #177                // Field com/hypixel/hytale/protocol/MouseButtonEvent.mouseButtonType:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     103: getstatic     #185                // Field com/hypixel/hytale/protocol/MouseButtonType.Middle:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     106: if_acmpne     246
+     109: aload_1
+     110: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     113: ifnull        515
+     116: aload_1
+     117: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     120: invokevirtual #194                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.hasBlockType:()Z
+     123: ifeq          515
+     126: aload         5
+     128: ifnull        515
+     131: aload_1
+     132: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     135: invokevirtual #199                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.getId:()Ljava/lang/String;
+     138: astore        8
+     140: invokestatic  #203                // Method com/hypixel/hytale/server/core/asset/type/blocktype/config/BlockType.getAssetMap:()Lcom/hypixel/hytale/assetstore/map/BlockTypeAssetMap;
+     143: aload         8
+     145: invokevirtual #209                // Method com/hypixel/hytale/assetstore/map/BlockTypeAssetMap.getIndex:(Ljava/lang/Object;)I
+     148: istore        9
+     150: iload         9
+     152: ldc           #217                // int -2147483648
+     154: if_icmpne     172
+     157: new           #218                // class java/lang/IllegalArgumentException
+     160: dup
+     161: aload         8
+     163: invokedynamic #220,  0            // InvokeDynamic #6:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     168: invokespecial #224                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+     171: athrow
+     172: aload         7
+     174: aload         5
+     176: invokevirtual #227                // Method com/hypixel/hytale/math/vector/Vector3i.equals:(Ljava/lang/Object;)Z
+     179: ifne          202
+     182: aload         7
+     184: aload         5
+     186: aload         4
+     188: iload         9
+     190: invokedynamic #233,  0            // InvokeDynamic #7:accept:(Lcom/hypixel/hytale/server/core/universe/world/World;I)Lcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;
+     195: invokestatic  #236                // Method com/hypixel/hytale/math/iterator/BlockIterator.iterateFromTo:(Lcom/hypixel/hytale/math/vector/Vector3i;Lcom/hypixel/hytale/math/vector/Vector3i;Lcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;)Z
+     198: pop
+     199: goto          243
+     202: aload         5
+     204: invokevirtual #242                // Method com/hypixel/hytale/math/vector/Vector3i.getX:()I
+     207: istore        10
+     209: aload         5
+     211: invokevirtual #246                // Method com/hypixel/hytale/math/vector/Vector3i.getZ:()I
+     214: istore        11
+     216: aload         4
+     218: iload         10
+     220: iload         11
+     222: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+     225: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+     228: iload         10
+     230: aload         5
+     232: invokevirtual #261                // Method com/hypixel/hytale/math/vector/Vector3i.getY:()I
+     235: iload         11
+     237: iload         9
+     239: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+     242: pop
+     243: goto          515
+     246: aload_1
+     247: invokevirtual #116                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getMouseButton:()Lcom/hypixel/hytale/protocol/MouseButtonEvent;
+     250: getfield      #177                // Field com/hypixel/hytale/protocol/MouseButtonEvent.mouseButtonType:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     253: getstatic     #270                // Field com/hypixel/hytale/protocol/MouseButtonType.Right:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     256: if_acmpne     330
+     259: aload         7
+     261: aload         5
+     263: invokevirtual #227                // Method com/hypixel/hytale/math/vector/Vector3i.equals:(Ljava/lang/Object;)Z
+     266: ifne          287
+     269: aload         7
+     271: aload         5
+     273: aload         4
+     275: invokedynamic #273,  0            // InvokeDynamic #8:accept:(Lcom/hypixel/hytale/server/core/universe/world/World;)Lcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;
+     280: invokestatic  #236                // Method com/hypixel/hytale/math/iterator/BlockIterator.iterateFromTo:(Lcom/hypixel/hytale/math/vector/Vector3i;Lcom/hypixel/hytale/math/vector/Vector3i;Lcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;)Z
+     283: pop
+     284: goto          515
+     287: aload         5
+     289: invokevirtual #242                // Method com/hypixel/hytale/math/vector/Vector3i.getX:()I
+     292: istore        8
+     294: aload         5
+     296: invokevirtual #246                // Method com/hypixel/hytale/math/vector/Vector3i.getZ:()I
+     299: istore        9
+     301: aload         4
+     303: iload         8
+     305: iload         9
+     307: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+     310: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+     313: iload         8
+     315: aload         5
+     317: invokevirtual #261                // Method com/hypixel/hytale/math/vector/Vector3i.getY:()I
+     320: iload         9
+     322: iconst_0
+     323: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+     326: pop
+     327: goto          515
+     330: aload_1
+     331: invokevirtual #116                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getMouseButton:()Lcom/hypixel/hytale/protocol/MouseButtonEvent;
+     334: getfield      #177                // Field com/hypixel/hytale/protocol/MouseButtonEvent.mouseButtonType:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     337: getstatic     #276                // Field com/hypixel/hytale/protocol/MouseButtonType.Left:Lcom/hypixel/hytale/protocol/MouseButtonType;
+     340: if_acmpne     515
+     343: aload_1
+     344: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     347: ifnull        515
+     350: aload_1
+     351: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     354: invokevirtual #194                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.hasBlockType:()Z
+     357: ifeq          515
+     360: aload         5
+     362: ifnull        515
+     365: aload_1
+     366: invokevirtual #190                // Method com/hypixel/hytale/server/core/event/events/player/PlayerMouseButtonEvent.getItemInHand:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+     369: invokevirtual #199                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.getId:()Ljava/lang/String;
+     372: astore        8
+     374: invokestatic  #203                // Method com/hypixel/hytale/server/core/asset/type/blocktype/config/BlockType.getAssetMap:()Lcom/hypixel/hytale/assetstore/map/BlockTypeAssetMap;
+     377: aload         8
+     379: invokevirtual #209                // Method com/hypixel/hytale/assetstore/map/BlockTypeAssetMap.getIndex:(Ljava/lang/Object;)I
+     382: istore        9
+     384: iload         9
+     386: ldc           #217                // int -2147483648
+     388: if_icmpne     406
+     391: new           #218                // class java/lang/IllegalArgumentException
+     394: dup
+     395: aload         8
+     397: invokedynamic #220,  0            // InvokeDynamic #6:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     402: invokespecial #224                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+     405: athrow
+     406: aload         7
+     408: aload         5
+     410: invokevirtual #227                // Method com/hypixel/hytale/math/vector/Vector3i.equals:(Ljava/lang/Object;)Z
+     413: ifne          472
+     416: aload         7
+     418: invokevirtual #242                // Method com/hypixel/hytale/math/vector/Vector3i.getX:()I
+     421: i2d
+     422: aload         7
+     424: invokevirtual #261                // Method com/hypixel/hytale/math/vector/Vector3i.getY:()I
+     427: iconst_1
+     428: iadd
+     429: i2d
+     430: aload         7
+     432: invokevirtual #246                // Method com/hypixel/hytale/math/vector/Vector3i.getZ:()I
+     435: i2d
+     436: aload         5
+     438: invokevirtual #242                // Method com/hypixel/hytale/math/vector/Vector3i.getX:()I
+     441: i2d
+     442: aload         5
+     444: invokevirtual #261                // Method com/hypixel/hytale/math/vector/Vector3i.getY:()I
+     447: iconst_1
+     448: iadd
+     449: i2d
+     450: aload         5
+     452: invokevirtual #246                // Method com/hypixel/hytale/math/vector/Vector3i.getZ:()I
+     455: i2d
+     456: aload         4
+     458: iload         9
+     460: invokedynamic #279,  0            // InvokeDynamic #9:accept:(Lcom/hypixel/hytale/server/core/universe/world/World;I)Lcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;
+     465: invokestatic  #280                // Method com/hypixel/hytale/math/iterator/BlockIterator.iterateFromTo:(DDDDDDLcom/hypixel/hytale/math/iterator/BlockIterator$BlockIteratorProcedure;)Z
+     468: pop
+     469: goto          515
+     472: aload         5
+     474: invokevirtual #242                // Method com/hypixel/hytale/math/vector/Vector3i.getX:()I
+     477: istore        10
+     479: aload         5
+     481: invokevirtual #246                // Method com/hypixel/hytale/math/vector/Vector3i.getZ:()I
+     484: istore        11
+     486: aload         4
+     488: iload         10
+     490: iload         11
+     492: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+     495: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+     498: iload         10
+     500: aload         5
+     502: invokevirtual #261                // Method com/hypixel/hytale/math/vector/Vector3i.getY:()I
+     505: iconst_1
+     506: iadd
+     507: iload         11
+     509: iload         9
+     511: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+     514: pop
+     515: return
+
+  private static com.hypixel.hytale.protocol.ServerCameraSettings createServerCameraSettings();
+    Code:
+       0: new           #283                // class com/hypixel/hytale/protocol/ServerCameraSettings
+       3: dup
+       4: invokespecial #285                // Method com/hypixel/hytale/protocol/ServerCameraSettings."<init>":()V
+       7: astore_0
+       8: aload_0
+       9: ldc_w         #286                // float 0.2f
+      12: putfield      #287                // Field com/hypixel/hytale/protocol/ServerCameraSettings.positionLerpSpeed:F
+      15: aload_0
+      16: ldc_w         #286                // float 0.2f
+      19: putfield      #291                // Field com/hypixel/hytale/protocol/ServerCameraSettings.rotationLerpSpeed:F
+      22: aload_0
+      23: ldc_w         #294                // float 20.0f
+      26: putfield      #295                // Field com/hypixel/hytale/protocol/ServerCameraSettings.distance:F
+      29: aload_0
+      30: iconst_1
+      31: putfield      #298                // Field com/hypixel/hytale/protocol/ServerCameraSettings.displayCursor:Z
+      34: aload_0
+      35: iconst_1
+      36: putfield      #301                // Field com/hypixel/hytale/protocol/ServerCameraSettings.sendMouseMotion:Z
+      39: aload_0
+      40: iconst_0
+      41: putfield      #304                // Field com/hypixel/hytale/protocol/ServerCameraSettings.isFirstPerson:Z
+      44: aload_0
+      45: getstatic     #307                // Field com/hypixel/hytale/protocol/MovementForceRotationType.Custom:Lcom/hypixel/hytale/protocol/MovementForceRotationType;
+      48: putfield      #312                // Field com/hypixel/hytale/protocol/ServerCameraSettings.movementForceRotationType:Lcom/hypixel/hytale/protocol/MovementForceRotationType;
+      51: aload_0
+      52: iconst_1
+      53: putfield      #315                // Field com/hypixel/hytale/protocol/ServerCameraSettings.eyeOffset:Z
+      56: aload_0
+      57: getstatic     #318                // Field com/hypixel/hytale/protocol/PositionDistanceOffsetType.DistanceOffset:Lcom/hypixel/hytale/protocol/PositionDistanceOffsetType;
+      60: putfield      #324                // Field com/hypixel/hytale/protocol/ServerCameraSettings.positionDistanceOffsetType:Lcom/hypixel/hytale/protocol/PositionDistanceOffsetType;
+      63: aload_0
+      64: getstatic     #327                // Field com/hypixel/hytale/protocol/RotationType.Custom:Lcom/hypixel/hytale/protocol/RotationType;
+      67: putfield      #332                // Field com/hypixel/hytale/protocol/ServerCameraSettings.rotationType:Lcom/hypixel/hytale/protocol/RotationType;
+      70: aload_0
+      71: new           #335                // class com/hypixel/hytale/protocol/Direction
+      74: dup
+      75: fconst_0
+      76: ldc_w         #339                // float -1.5707964f
+      79: fconst_0
+      80: invokespecial #340                // Method com/hypixel/hytale/protocol/Direction."<init>":(FFF)V
+      83: putfield      #343                // Field com/hypixel/hytale/protocol/ServerCameraSettings.rotation:Lcom/hypixel/hytale/protocol/Direction;
+      86: aload_0
+      87: getstatic     #347                // Field com/hypixel/hytale/protocol/MouseInputType.LookAtPlane:Lcom/hypixel/hytale/protocol/MouseInputType;
+      90: putfield      #353                // Field com/hypixel/hytale/protocol/ServerCameraSettings.mouseInputType:Lcom/hypixel/hytale/protocol/MouseInputType;
+      93: aload_0
+      94: new           #356                // class com/hypixel/hytale/protocol/Vector3f
+      97: dup
+      98: fconst_0
+      99: fconst_1
+     100: fconst_0
+     101: invokespecial #358                // Method com/hypixel/hytale/protocol/Vector3f."<init>":(FFF)V
+     104: putfield      #359                // Field com/hypixel/hytale/protocol/ServerCameraSettings.planeNormal:Lcom/hypixel/hytale/protocol/Vector3f;
+     107: aload_0
+     108: areturn
+
+  private static boolean lambda$onPlayerMouseButton$2(com.hypixel.hytale.server.core.universe.world.World, int, int, int, int, double, double, double, double, double, double);
+    Code:
+       0: aload_0
+       1: iload_2
+       2: iload         4
+       4: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+       7: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+      10: iload_2
+      11: iload_3
+      12: iload         4
+      14: iload_1
+      15: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+      18: pop
+      19: iconst_1
+      20: ireturn
+
+  private static boolean lambda$onPlayerMouseButton$1(com.hypixel.hytale.server.core.universe.world.World, int, int, int, double, double, double, double, double, double);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: iload_3
+       3: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+       6: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+       9: iload_1
+      10: iload_2
+      11: iload_3
+      12: iconst_0
+      13: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+      16: pop
+      17: iconst_1
+      18: ireturn
+
+  private static boolean lambda$onPlayerMouseButton$0(com.hypixel.hytale.server.core.universe.world.World, int, int, int, int, double, double, double, double, double, double);
+    Code:
+       0: aload_0
+       1: iload_2
+       2: iload         4
+       4: invokestatic  #249                // Method com/hypixel/hytale/math/util/ChunkUtil.indexChunkFromBlock:(II)J
+       7: invokevirtual #255                // Method com/hypixel/hytale/server/core/universe/world/World.getChunk:(J)Lcom/hypixel/hytale/server/core/universe/world/chunk/WorldChunk;
+      10: iload_2
+      11: iload_3
+      12: iload         4
+      14: iload_1
+      15: invokevirtual #264                // Method com/hypixel/hytale/server/core/universe/world/chunk/WorldChunk.setBlock:(IIII)Z
+      18: pop
+      19: iconst_1
+      20: ireturn
+
+  private static void lambda$deactivate$0(com.hypixel.hytale.server.core.universe.PlayerRef);
+    Code:
+       0: aload_0
+       1: invokestatic  #161                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       4: invokevirtual #363                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponent:(Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+       7: checkcast     #162                // class com/hypixel/hytale/server/core/entity/entities/player/CameraManager
+      10: astore_1
+      11: aload_1
+      12: ifnull        20
+      15: aload_1
+      16: aload_0
+      17: invokevirtual #366                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.resetCamera:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      20: return
+
+  private static void lambda$activate$1(com.hypixel.hytale.server.core.event.events.player.PlayerInteractEvent);
+    Code:
+       0: aload_0
+       1: iconst_1
+       2: invokevirtual #370                // Method com/hypixel/hytale/server/core/event/events/player/PlayerInteractEvent.setCancelled:(Z)V
+       5: return
+
+  private void lambda$activate$0(com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: invokevirtual #374                // Method com/hypixel/hytale/server/core/event/events/player/PlayerConnectEvent.getPlayerRef:()Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       5: invokevirtual #377                // Method onAddNewPlayer:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+       8: return
+
+  private boolean lambda$new$0();
+    Code:
+       0: aload_0
+       1: getfield      #45                 // Field isActive:Z
+       4: ireturn
+
+  static {};
+    Code:
+       0: ldc           #32                 // class com/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo
+       2: invokevirtual #380                // Method java/lang/Class.desiredAssertionStatus:()Z
+       5: ifne          12
+       8: iconst_1
+       9: goto          13
+      12: iconst_0
+      13: putstatic     #171                // Field $assertionsDisabled:Z
+      16: new           #32                 // class com/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo
+      19: dup
+      20: invokespecial #385                // Method "<init>":()V
+      23: putstatic     #386                // Field INSTANCE:Lcom/hypixel/hytale/server/core/command/commands/player/camera/CameraDemo;
+      26: return
+}

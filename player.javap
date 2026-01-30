@@ -1,0 +1,1637 @@
+Compiled from "Player.java"
+public class com.hypixel.hytale.server.core.entity.entities.Player extends com.hypixel.hytale.server.core.entity.LivingEntity implements com.hypixel.hytale.server.core.command.system.CommandSender,com.hypixel.hytale.server.core.permissions.PermissionHolder,com.hypixel.hytale.metrics.MetricProvider {
+  public static final com.hypixel.hytale.metrics.MetricsRegistry<com.hypixel.hytale.server.core.entity.entities.Player> METRICS_REGISTRY;
+
+  public static final com.hypixel.hytale.codec.KeyedCodec<com.hypixel.hytale.server.core.entity.entities.player.data.PlayerConfigData> PLAYER_CONFIG_DATA;
+
+  public static final com.hypixel.hytale.codec.builder.BuilderCodec<com.hypixel.hytale.server.core.entity.entities.Player> CODEC;
+
+  public static final int DEFAULT_VIEW_RADIUS_CHUNKS;
+
+  public static final long RESPAWN_INVULNERABILITY_TIME_NANOS;
+
+  public static final long MAX_TELEPORT_INVULNERABILITY_MILLIS;
+
+  protected long lastSpawnTimeNanos;
+
+  public boolean executeTriggers;
+
+  public boolean executeBlockDamage;
+
+  static final boolean $assertionsDisabled;
+
+  public static com.hypixel.hytale.component.ComponentType<com.hypixel.hytale.server.core.universe.world.storage.EntityStore, com.hypixel.hytale.server.core.entity.entities.Player> getComponentType();
+    Code:
+       0: invokestatic  #3                  // Method com/hypixel/hytale/server/core/modules/entity/EntityModule.get:()Lcom/hypixel/hytale/server/core/modules/entity/EntityModule;
+       3: invokevirtual #9                  // Method com/hypixel/hytale/server/core/modules/entity/EntityModule.getPlayerComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       6: areturn
+
+  public com.hypixel.hytale.server.core.entity.entities.Player();
+    Code:
+       0: aload_0
+       1: invokespecial #13                 // Method com/hypixel/hytale/server/core/entity/LivingEntity."<init>":()V
+       4: aload_0
+       5: new           #19                 // class com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData
+       8: dup
+       9: invokespecial #21                 // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData."<init>":()V
+      12: putfield      #22                 // Field data:Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData;
+      15: aload_0
+      16: new           #26                 // class com/hypixel/hytale/server/core/universe/world/WorldMapTracker
+      19: dup
+      20: aload_0
+      21: invokespecial #28                 // Method com/hypixel/hytale/server/core/universe/world/WorldMapTracker."<init>":(Lcom/hypixel/hytale/server/core/entity/entities/Player;)V
+      24: putfield      #31                 // Field worldMapTracker:Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;
+      27: aload_0
+      28: new           #35                 // class com/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager
+      31: dup
+      32: invokespecial #37                 // Method com/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager."<init>":()V
+      35: putfield      #38                 // Field windowManager:Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;
+      38: aload_0
+      39: new           #42                 // class com/hypixel/hytale/server/core/entity/entities/player/pages/PageManager
+      42: dup
+      43: invokespecial #44                 // Method com/hypixel/hytale/server/core/entity/entities/player/pages/PageManager."<init>":()V
+      46: putfield      #45                 // Field pageManager:Lcom/hypixel/hytale/server/core/entity/entities/player/pages/PageManager;
+      49: aload_0
+      50: new           #49                 // class com/hypixel/hytale/server/core/entity/entities/player/hud/HudManager
+      53: dup
+      54: invokespecial #51                 // Method com/hypixel/hytale/server/core/entity/entities/player/hud/HudManager."<init>":()V
+      57: putfield      #52                 // Field hudManager:Lcom/hypixel/hytale/server/core/entity/entities/player/hud/HudManager;
+      60: aload_0
+      61: new           #56                 // class com/hypixel/hytale/server/core/entity/entities/player/HotbarManager
+      64: dup
+      65: invokespecial #58                 // Method com/hypixel/hytale/server/core/entity/entities/player/HotbarManager."<init>":()V
+      68: putfield      #59                 // Field hotbarManager:Lcom/hypixel/hytale/server/core/entity/entities/player/HotbarManager;
+      71: aload_0
+      72: bipush        6
+      74: putfield      #63                 // Field clientViewRadius:I
+      77: aload_0
+      78: bipush        12
+      80: newarray       double
+      82: putfield      #67                 // Field velocitySamples:[D
+      85: aload_0
+      86: iconst_4
+      87: putfield      #71                 // Field velocitySampleIndex:I
+      90: aload_0
+      91: new           #74                 // class java/util/concurrent/atomic/AtomicInteger
+      94: dup
+      95: invokespecial #76                 // Method java/util/concurrent/atomic/AtomicInteger."<init>":()V
+      98: putfield      #77                 // Field readyId:Ljava/util/concurrent/atomic/AtomicInteger;
+     101: aload_0
+     102: new           #81                 // class java/util/concurrent/atomic/AtomicReference
+     105: dup
+     106: invokespecial #83                 // Method java/util/concurrent/atomic/AtomicReference."<init>":()V
+     109: putfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+     112: return
+
+  public void copyFrom(com.hypixel.hytale.server.core.entity.entities.Player);
+    Code:
+       0: aload_0
+       1: aload_0
+       2: getfield      #88                 // Field legacyUuid:Ljava/util/UUID;
+       5: aload_0
+       6: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       9: invokevirtual #96                 // Method init:(Ljava/util/UUID;Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      12: aload_0
+      13: getfield      #31                 // Field worldMapTracker:Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;
+      16: aload_1
+      17: getfield      #31                 // Field worldMapTracker:Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;
+      20: invokevirtual #100                // Method com/hypixel/hytale/server/core/universe/world/WorldMapTracker.copyFrom:(Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;)V
+      23: aload_0
+      24: aload_1
+      25: getfield      #63                 // Field clientViewRadius:I
+      28: putfield      #63                 // Field clientViewRadius:I
+      31: aload_0
+      32: getfield      #77                 // Field readyId:Ljava/util/concurrent/atomic/AtomicInteger;
+      35: aload_1
+      36: getfield      #77                 // Field readyId:Ljava/util/concurrent/atomic/AtomicInteger;
+      39: invokevirtual #104                // Method java/util/concurrent/atomic/AtomicInteger.get:()I
+      42: invokevirtual #107                // Method java/util/concurrent/atomic/AtomicInteger.set:(I)V
+      45: return
+
+  public void init(java.util.UUID, com.hypixel.hytale.server.core.universe.PlayerRef);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #88                 // Field legacyUuid:Ljava/util/UUID;
+       5: aload_0
+       6: aload_2
+       7: putfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      10: aload_0
+      11: getfield      #38                 // Field windowManager:Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;
+      14: aload_2
+      15: invokevirtual #111                // Method com/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager.init:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      18: aload_0
+      19: getfield      #45                 // Field pageManager:Lcom/hypixel/hytale/server/core/entity/entities/player/pages/PageManager;
+      22: aload_2
+      23: aload_0
+      24: getfield      #38                 // Field windowManager:Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;
+      27: invokevirtual #114                // Method com/hypixel/hytale/server/core/entity/entities/player/pages/PageManager.init:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;)V
+      30: return
+
+  public void setNetworkId(int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: putfield      #117                // Field networkId:I
+       5: return
+
+  protected com.hypixel.hytale.server.core.inventory.Inventory createDefaultInventory();
+    Code:
+       0: new           #120                // class com/hypixel/hytale/server/core/inventory/Inventory
+       3: dup
+       4: invokespecial #122                // Method com/hypixel/hytale/server/core/inventory/Inventory."<init>":()V
+       7: areturn
+
+  public com.hypixel.hytale.server.core.inventory.Inventory setInventory(com.hypixel.hytale.server.core.inventory.Inventory);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: iconst_1
+       3: invokespecial #123                // Method com/hypixel/hytale/server/core/entity/LivingEntity.setInventory:(Lcom/hypixel/hytale/server/core/inventory/Inventory;Z)Lcom/hypixel/hytale/server/core/inventory/Inventory;
+       6: areturn
+
+  public boolean remove();
+    Code:
+       0: aload_0
+       1: getfield      #127                // Field wasRemoved:Ljava/util/concurrent/atomic/AtomicBoolean;
+       4: iconst_1
+       5: invokevirtual #131                // Method java/util/concurrent/atomic/AtomicBoolean.getAndSet:(Z)Z
+       8: ifeq          13
+      11: iconst_0
+      12: ireturn
+      13: aload_0
+      14: new           #137                // class java/lang/Throwable
+      17: dup
+      18: invokespecial #139                // Method java/lang/Throwable."<init>":()V
+      21: putfield      #140                // Field removedBy:Ljava/lang/Throwable;
+      24: aload_0
+      25: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+      28: ifnull        112
+      31: aload_0
+      32: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+      35: invokevirtual #148                // Method com/hypixel/hytale/server/core/universe/world/World.isAlive:()Z
+      38: ifeq          112
+      41: aload_0
+      42: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+      45: invokevirtual #154                // Method com/hypixel/hytale/server/core/universe/world/World.isInThread:()Z
+      48: ifeq          99
+      51: aload_0
+      52: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      55: invokevirtual #157                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getReference:()Lcom/hypixel/hytale/component/Ref;
+      58: astore_1
+      59: aload_1
+      60: ifnull        96
+      63: aload_1
+      64: invokevirtual #163                // Method com/hypixel/hytale/component/Ref.getStore:()Lcom/hypixel/hytale/component/Store;
+      67: astore_2
+      68: aload_2
+      69: aload_1
+      70: invokestatic  #169                // Method com/hypixel/hytale/server/core/modules/entity/player/ChunkTracker.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      73: invokevirtual #174                // Method com/hypixel/hytale/component/Store.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      76: checkcast     #170                // class com/hypixel/hytale/server/core/modules/entity/player/ChunkTracker
+      79: astore_3
+      80: aload_3
+      81: ifnull        88
+      84: aload_3
+      85: invokevirtual #180                // Method com/hypixel/hytale/server/core/modules/entity/player/ChunkTracker.clear:()V
+      88: aload_0
+      89: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      92: invokevirtual #183                // Method com/hypixel/hytale/server/core/universe/PlayerRef.removeFromStore:()Lcom/hypixel/hytale/component/Holder;
+      95: pop
+      96: goto          112
+      99: aload_0
+     100: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+     103: aload_0
+     104: invokedynamic #187,  0            // InvokeDynamic #0:run:(Lcom/hypixel/hytale/server/core/entity/entities/Player;)Ljava/lang/Runnable;
+     109: invokevirtual #191                // Method com/hypixel/hytale/server/core/universe/world/World.execute:(Ljava/lang/Runnable;)V
+     112: aload_0
+     113: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+     116: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+     119: invokevirtual #199                // Method com/hypixel/hytale/server/core/io/PacketHandler.getChannel:()Lio/netty/channel/Channel;
+     122: invokeinterface #205,  1          // InterfaceMethod io/netty/channel/Channel.isActive:()Z
+     127: ifeq          171
+     130: aload_0
+     131: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+     134: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+     137: ldc           #210                // String Player removed from world!
+     139: invokevirtual #212                // Method com/hypixel/hytale/server/core/io/PacketHandler.disconnect:(Ljava/lang/String;)V
+     142: getstatic     #216                // Field LOGGER:Lcom/hypixel/hytale/logger/HytaleLogger;
+     145: getstatic     #220                // Field java/util/logging/Level.WARNING:Ljava/util/logging/Level;
+     148: invokevirtual #226                // Method com/hypixel/hytale/logger/HytaleLogger.at:(Ljava/util/logging/Level;)Lcom/hypixel/hytale/logger/HytaleLogger$Api;
+     151: aload_0
+     152: getfield      #140                // Field removedBy:Ljava/lang/Throwable;
+     155: invokeinterface #232,  2          // InterfaceMethod com/hypixel/hytale/logger/HytaleLogger$Api.withCause:(Ljava/lang/Throwable;)Lcom/google/common/flogger/LoggingApi;
+     160: checkcast     #233                // class com/hypixel/hytale/logger/HytaleLogger$Api
+     163: ldc           #238                // String Player removed from world! %s
+     165: aload_0
+     166: invokeinterface #240,  3          // InterfaceMethod com/hypixel/hytale/logger/HytaleLogger$Api.log:(Ljava/lang/String;Ljava/lang/Object;)V
+     171: aload_0
+     172: getfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+     175: aconst_null
+     176: invokevirtual #244                // Method java/util/concurrent/atomic/AtomicReference.getAndSet:(Ljava/lang/Object;)Ljava/lang/Object;
+     179: checkcast     #247                // class java/util/concurrent/ScheduledFuture
+     182: dup
+     183: astore_1
+     184: ifnull        195
+     187: aload_1
+     188: iconst_0
+     189: invokeinterface #249,  2          // InterfaceMethod java/util/concurrent/ScheduledFuture.cancel:(Z)Z
+     194: pop
+     195: iconst_1
+     196: ireturn
+
+  public void moveTo(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, double, double, double, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload         8
+       2: aload_1
+       3: invokestatic  #252                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       6: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      11: checkcast     #253                // class com/hypixel/hytale/server/core/modules/entity/component/TransformComponent
+      14: astore        9
+      16: getstatic     #258                // Field $assertionsDisabled:Z
+      19: ifne          35
+      22: aload         9
+      24: ifnonnull     35
+      27: new           #262                // class java/lang/AssertionError
+      30: dup
+      31: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      34: athrow
+      35: aload         9
+      37: invokevirtual #265                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getPosition:()Lcom/hypixel/hytale/math/vector/Vector3d;
+      40: astore        10
+      42: aload_0
+      43: aload_1
+      44: dload_2
+      45: aload         10
+      47: invokevirtual #269                // Method com/hypixel/hytale/math/vector/Vector3d.getX:()D
+      50: dsub
+      51: dload         4
+      53: aload         10
+      55: invokevirtual #275                // Method com/hypixel/hytale/math/vector/Vector3d.getY:()D
+      58: dsub
+      59: dload         6
+      61: aload         10
+      63: invokevirtual #278                // Method com/hypixel/hytale/math/vector/Vector3d.getZ:()D
+      66: dsub
+      67: aload         8
+      69: invokevirtual #281                // Method addLocationChange:(Lcom/hypixel/hytale/component/Ref;DDDLcom/hypixel/hytale/component/ComponentAccessor;)V
+      72: aload_0
+      73: aload_1
+      74: dload_2
+      75: dload         4
+      77: dload         6
+      79: aload         8
+      81: invokespecial #285                // Method com/hypixel/hytale/server/core/entity/LivingEntity.moveTo:(Lcom/hypixel/hytale/component/Ref;DDDLcom/hypixel/hytale/component/ComponentAccessor;)V
+      84: aload_0
+      85: getfield      #38                 // Field windowManager:Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;
+      88: aload_1
+      89: aload         8
+      91: invokevirtual #288                // Method com/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager.validateWindows:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentAccessor;)V
+      94: return
+
+  public com.hypixel.hytale.server.core.entity.entities.player.data.PlayerConfigData getPlayerConfigData();
+    Code:
+       0: aload_0
+       1: getfield      #22                 // Field data:Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData;
+       4: areturn
+
+  public void markNeedsSave();
+    Code:
+       0: aload_0
+       1: getfield      #22                 // Field data:Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData;
+       4: invokevirtual #292                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData.markChanged:()V
+       7: return
+
+  public void unloadFromWorld();
+    Code:
+       0: aload_0
+       1: invokespecial #295                // Method com/hypixel/hytale/server/core/entity/LivingEntity.unloadFromWorld:()V
+       4: return
+
+  public void applyMovementStates(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.protocol.SavedMovementStates, com.hypixel.hytale.protocol.MovementStates, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_3
+       1: aload_2
+       2: getfield      #298                // Field com/hypixel/hytale/protocol/SavedMovementStates.flying:Z
+       5: putfield      #303                // Field com/hypixel/hytale/protocol/MovementStates.flying:Z
+       8: aload         4
+      10: aload_1
+      11: invokestatic  #306                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      14: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      19: checkcast     #158                // class com/hypixel/hytale/server/core/universe/PlayerRef
+      22: astore        5
+      24: getstatic     #258                // Field $assertionsDisabled:Z
+      27: ifne          43
+      30: aload         5
+      32: ifnonnull     43
+      35: new           #262                // class java/lang/AssertionError
+      38: dup
+      39: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      42: athrow
+      43: aload         5
+      45: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+      48: new           #307                // class com/hypixel/hytale/protocol/packets/player/SetMovementStates
+      51: dup
+      52: new           #299                // class com/hypixel/hytale/protocol/SavedMovementStates
+      55: dup
+      56: aload_3
+      57: getfield      #303                // Field com/hypixel/hytale/protocol/MovementStates.flying:Z
+      60: invokespecial #309                // Method com/hypixel/hytale/protocol/SavedMovementStates."<init>":(Z)V
+      63: invokespecial #312                // Method com/hypixel/hytale/protocol/packets/player/SetMovementStates."<init>":(Lcom/hypixel/hytale/protocol/SavedMovementStates;)V
+      66: invokevirtual #315                // Method com/hypixel/hytale/server/core/io/PacketHandler.writeNoCache:(Lcom/hypixel/hytale/protocol/Packet;)V
+      69: return
+
+  public void startClientReadyTimeout();
+    Code:
+       0: getstatic     #319                // Field com/hypixel/hytale/server/core/HytaleServer.SCHEDULED_EXECUTOR:Ljava/util/concurrent/ScheduledExecutorService;
+       3: aload_0
+       4: invokedynamic #325,  0            // InvokeDynamic #1:run:(Lcom/hypixel/hytale/server/core/entity/entities/Player;)Ljava/lang/Runnable;
+       9: ldc2_w        #326                // long 10000l
+      12: getstatic     #328                // Field java/util/concurrent/TimeUnit.MILLISECONDS:Ljava/util/concurrent/TimeUnit;
+      15: invokeinterface #334,  5          // InterfaceMethod java/util/concurrent/ScheduledExecutorService.schedule:(Ljava/lang/Runnable;JLjava/util/concurrent/TimeUnit;)Ljava/util/concurrent/ScheduledFuture;
+      20: astore_1
+      21: aload_0
+      22: getfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+      25: aload_1
+      26: invokevirtual #244                // Method java/util/concurrent/atomic/AtomicReference.getAndSet:(Ljava/lang/Object;)Ljava/lang/Object;
+      29: checkcast     #247                // class java/util/concurrent/ScheduledFuture
+      32: astore_2
+      33: aload_2
+      34: ifnull        45
+      37: aload_2
+      38: iconst_0
+      39: invokeinterface #249,  2          // InterfaceMethod java/util/concurrent/ScheduledFuture.cancel:(Z)Z
+      44: pop
+      45: return
+
+  public void handleClientReady(boolean);
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+       4: aconst_null
+       5: invokevirtual #244                // Method java/util/concurrent/atomic/AtomicReference.getAndSet:(Ljava/lang/Object;)Ljava/lang/Object;
+       8: checkcast     #247                // class java/util/concurrent/ScheduledFuture
+      11: dup
+      12: astore_2
+      13: ifnull        87
+      16: aload_2
+      17: iconst_0
+      18: invokeinterface #249,  2          // InterfaceMethod java/util/concurrent/ScheduledFuture.cancel:(Z)Z
+      23: pop
+      24: aload_0
+      25: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+      28: ifnonnull     32
+      31: return
+      32: invokestatic  #340                // Method com/hypixel/hytale/server/core/HytaleServer.get:()Lcom/hypixel/hytale/server/core/HytaleServer;
+      35: invokevirtual #343                // Method com/hypixel/hytale/server/core/HytaleServer.getEventBus:()Lcom/hypixel/hytale/event/EventBus;
+      38: ldc_w         #347                // class com/hypixel/hytale/server/core/event/events/player/PlayerReadyEvent
+      41: aload_0
+      42: getfield      #144                // Field world:Lcom/hypixel/hytale/server/core/universe/world/World;
+      45: invokevirtual #349                // Method com/hypixel/hytale/server/core/universe/world/World.getName:()Ljava/lang/String;
+      48: invokevirtual #353                // Method com/hypixel/hytale/event/EventBus.dispatchFor:(Ljava/lang/Class;Ljava/lang/Object;)Lcom/hypixel/hytale/event/IEventDispatcher;
+      51: astore_3
+      52: aload_3
+      53: invokeinterface #359,  1          // InterfaceMethod com/hypixel/hytale/event/IEventDispatcher.hasListener:()Z
+      58: ifeq          87
+      61: aload_3
+      62: new           #347                // class com/hypixel/hytale/server/core/event/events/player/PlayerReadyEvent
+      65: dup
+      66: aload_0
+      67: getfield      #364                // Field reference:Lcom/hypixel/hytale/component/Ref;
+      70: aload_0
+      71: aload_0
+      72: getfield      #77                 // Field readyId:Ljava/util/concurrent/atomic/AtomicInteger;
+      75: invokevirtual #368                // Method java/util/concurrent/atomic/AtomicInteger.getAndIncrement:()I
+      78: invokespecial #371                // Method com/hypixel/hytale/server/core/event/events/player/PlayerReadyEvent."<init>":(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/server/core/entity/entities/Player;I)V
+      81: invokeinterface #374,  2          // InterfaceMethod com/hypixel/hytale/event/IEventDispatcher.dispatch:(Lcom/hypixel/hytale/event/IBaseEvent;)Ljava/lang/Object;
+      86: pop
+      87: return
+
+  public void sendInventory();
+    Code:
+       0: aload_0
+       1: invokevirtual #378                // Method getInventory:()Lcom/hypixel/hytale/server/core/inventory/Inventory;
+       4: invokevirtual #382                // Method com/hypixel/hytale/server/core/inventory/Inventory.consumeIsDirty:()Z
+       7: pop
+       8: aload_0
+       9: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      12: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+      15: aload_0
+      16: invokevirtual #378                // Method getInventory:()Lcom/hypixel/hytale/server/core/inventory/Inventory;
+      19: invokevirtual #385                // Method com/hypixel/hytale/server/core/inventory/Inventory.toPacket:()Lcom/hypixel/hytale/protocol/packets/inventory/UpdatePlayerInventory;
+      22: invokevirtual #389                // Method com/hypixel/hytale/server/core/io/PacketHandler.write:(Lcom/hypixel/hytale/protocol/Packet;)V
+      25: return
+
+  public java.util.concurrent.CompletableFuture<java.lang.Void> saveConfig(com.hypixel.hytale.server.core.universe.world.World, com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_2
+       1: invokestatic  #392                // Method com/hypixel/hytale/server/core/entity/movement/MovementStatesComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       4: invokevirtual #395                // Method com/hypixel/hytale/component/Holder.getComponent:(Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+       7: checkcast     #393                // class com/hypixel/hytale/server/core/entity/movement/MovementStatesComponent
+      10: astore_3
+      11: getstatic     #258                // Field $assertionsDisabled:Z
+      14: ifne          29
+      17: aload_3
+      18: ifnonnull     29
+      21: new           #262                // class java/lang/AssertionError
+      24: dup
+      25: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      28: athrow
+      29: aload_2
+      30: invokestatic  #400                // Method com/hypixel/hytale/server/core/entity/UUIDComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      33: invokevirtual #395                // Method com/hypixel/hytale/component/Holder.getComponent:(Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      36: checkcast     #401                // class com/hypixel/hytale/server/core/entity/UUIDComponent
+      39: astore        4
+      41: getstatic     #258                // Field $assertionsDisabled:Z
+      44: ifne          60
+      47: aload         4
+      49: ifnonnull     60
+      52: new           #262                // class java/lang/AssertionError
+      55: dup
+      56: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      59: athrow
+      60: aload_0
+      61: getfield      #22                 // Field data:Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData;
+      64: aload_1
+      65: invokevirtual #349                // Method com/hypixel/hytale/server/core/universe/world/World.getName:()Ljava/lang/String;
+      68: invokevirtual #403                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData.getPerWorldData:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerWorldData;
+      71: aload_3
+      72: invokevirtual #407                // Method com/hypixel/hytale/server/core/entity/movement/MovementStatesComponent.getMovementStates:()Lcom/hypixel/hytale/protocol/MovementStates;
+      75: iconst_0
+      76: invokevirtual #411                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerWorldData.setLastMovementStates:(Lcom/hypixel/hytale/protocol/MovementStates;Z)V
+      79: invokestatic  #417                // Method com/hypixel/hytale/server/core/universe/Universe.get:()Lcom/hypixel/hytale/server/core/universe/Universe;
+      82: invokevirtual #422                // Method com/hypixel/hytale/server/core/universe/Universe.getPlayerStorage:()Lcom/hypixel/hytale/server/core/universe/playerdata/PlayerStorage;
+      85: aload         4
+      87: invokevirtual #426                // Method com/hypixel/hytale/server/core/entity/UUIDComponent.getUuid:()Ljava/util/UUID;
+      90: aload_2
+      91: invokeinterface #430,  3          // InterfaceMethod com/hypixel/hytale/server/core/universe/playerdata/PlayerStorage.save:(Ljava/util/UUID;Lcom/hypixel/hytale/component/Holder;)Ljava/util/concurrent/CompletableFuture;
+      96: areturn
+
+  public com.hypixel.hytale.server.core.io.PacketHandler getPlayerConnection();
+    Code:
+       0: aload_0
+       1: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       4: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+       7: areturn
+
+  public com.hypixel.hytale.server.core.universe.world.WorldMapTracker getWorldMapTracker();
+    Code:
+       0: aload_0
+       1: getfield      #31                 // Field worldMapTracker:Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;
+       4: areturn
+
+  public com.hypixel.hytale.server.core.entity.entities.player.windows.WindowManager getWindowManager();
+    Code:
+       0: aload_0
+       1: getfield      #38                 // Field windowManager:Lcom/hypixel/hytale/server/core/entity/entities/player/windows/WindowManager;
+       4: areturn
+
+  public com.hypixel.hytale.server.core.entity.entities.player.pages.PageManager getPageManager();
+    Code:
+       0: aload_0
+       1: getfield      #45                 // Field pageManager:Lcom/hypixel/hytale/server/core/entity/entities/player/pages/PageManager;
+       4: areturn
+
+  public com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager getHudManager();
+    Code:
+       0: aload_0
+       1: getfield      #52                 // Field hudManager:Lcom/hypixel/hytale/server/core/entity/entities/player/hud/HudManager;
+       4: areturn
+
+  public com.hypixel.hytale.server.core.entity.entities.player.HotbarManager getHotbarManager();
+    Code:
+       0: aload_0
+       1: getfield      #59                 // Field hotbarManager:Lcom/hypixel/hytale/server/core/entity/entities/player/HotbarManager;
+       4: areturn
+
+  public boolean isFirstSpawn();
+    Code:
+       0: aload_0
+       1: getfield      #436                // Field firstSpawn:Z
+       4: ireturn
+
+  public void setFirstSpawn(boolean);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: putfield      #436                // Field firstSpawn:Z
+       5: return
+
+  public void resetManagers(com.hypixel.hytale.component.Holder<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_0
+       1: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       4: astore_2
+       5: aload_0
+       6: aload_1
+       7: invokestatic  #439                // Method com/hypixel/hytale/server/core/modules/entity/tracker/LegacyEntityTrackerSystems.clear:(Lcom/hypixel/hytale/server/core/entity/entities/Player;Lcom/hypixel/hytale/component/Holder;)Z
+      10: pop
+      11: aload_0
+      12: getfield      #31                 // Field worldMapTracker:Lcom/hypixel/hytale/server/core/universe/world/WorldMapTracker;
+      15: invokevirtual #444                // Method com/hypixel/hytale/server/core/universe/world/WorldMapTracker.clear:()V
+      18: aload_0
+      19: getfield      #52                 // Field hudManager:Lcom/hypixel/hytale/server/core/entity/entities/player/hud/HudManager;
+      22: aload_0
+      23: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      26: invokevirtual #445                // Method com/hypixel/hytale/server/core/entity/entities/player/hud/HudManager.resetUserInterface:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      29: aload_0
+      30: getfield      #52                 // Field hudManager:Lcom/hypixel/hytale/server/core/entity/entities/player/hud/HudManager;
+      33: aload_0
+      34: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+      37: invokevirtual #448                // Method com/hypixel/hytale/server/core/entity/entities/player/hud/HudManager.resetHud:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      40: aload_2
+      41: invokestatic  #451                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      44: invokevirtual #454                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponent:(Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      47: checkcast     #452                // class com/hypixel/hytale/server/core/entity/entities/player/CameraManager
+      50: astore_3
+      51: getstatic     #258                // Field $assertionsDisabled:Z
+      54: ifne          69
+      57: aload_3
+      58: ifnonnull     69
+      61: new           #262                // class java/lang/AssertionError
+      64: dup
+      65: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      68: athrow
+      69: aload_3
+      70: aload_2
+      71: invokevirtual #455                // Method com/hypixel/hytale/server/core/entity/entities/player/CameraManager.resetCamera:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;)V
+      74: aload_2
+      75: invokestatic  #458                // Method com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      78: invokevirtual #454                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponent:(Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      81: checkcast     #459                // class com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager
+      84: astore        4
+      86: getstatic     #258                // Field $assertionsDisabled:Z
+      89: ifne          105
+      92: aload         4
+      94: ifnonnull     105
+      97: new           #262                // class java/lang/AssertionError
+     100: dup
+     101: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+     104: athrow
+     105: aload         4
+     107: invokevirtual #461                // Method com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager.applyDefaultSettings:()V
+     110: aload         4
+     112: aload_2
+     113: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+     116: invokevirtual #464                // Method com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager.update:(Lcom/hypixel/hytale/server/core/io/PacketHandler;)V
+     119: return
+
+  public void notifyPickupItem(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.server.core.inventory.ItemStack, com.hypixel.hytale.math.vector.Vector3d, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload         4
+       2: invokeinterface #468,  1          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getExternalData:()Ljava/lang/Object;
+       7: checkcast     #472                // class com/hypixel/hytale/server/core/universe/world/storage/EntityStore
+      10: invokevirtual #474                // Method com/hypixel/hytale/server/core/universe/world/storage/EntityStore.getWorld:()Lcom/hypixel/hytale/server/core/universe/world/World;
+      13: astore        5
+      15: aload         5
+      17: invokevirtual #478                // Method com/hypixel/hytale/server/core/universe/world/World.getGameplayConfig:()Lcom/hypixel/hytale/server/core/asset/type/gameplay/GameplayConfig;
+      20: invokevirtual #482                // Method com/hypixel/hytale/server/core/asset/type/gameplay/GameplayConfig.getShowItemPickupNotifications:()Z
+      23: ifeq          100
+      26: aload         4
+      28: aload_1
+      29: invokestatic  #306                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      32: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      37: checkcast     #158                // class com/hypixel/hytale/server/core/universe/PlayerRef
+      40: astore        6
+      42: getstatic     #258                // Field $assertionsDisabled:Z
+      45: ifne          61
+      48: aload         6
+      50: ifnonnull     61
+      53: new           #262                // class java/lang/AssertionError
+      56: dup
+      57: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      60: athrow
+      61: aload_2
+      62: invokevirtual #487                // Method com/hypixel/hytale/server/core/inventory/ItemStack.getItem:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+      65: invokevirtual #493                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.getTranslationKey:()Ljava/lang/String;
+      68: invokestatic  #498                // Method com/hypixel/hytale/server/core/Message.translation:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/Message;
+      71: astore        7
+      73: aload         6
+      75: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+      78: ldc_w         #504                // String server.general.pickedUpItem
+      81: invokestatic  #498                // Method com/hypixel/hytale/server/core/Message.translation:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/Message;
+      84: ldc_w         #506                // String item
+      87: aload         7
+      89: invokevirtual #508                // Method com/hypixel/hytale/server/core/Message.param:(Ljava/lang/String;Lcom/hypixel/hytale/server/core/Message;)Lcom/hypixel/hytale/server/core/Message;
+      92: aconst_null
+      93: aload_2
+      94: invokevirtual #512                // Method com/hypixel/hytale/server/core/inventory/ItemStack.toPacket:()Lcom/hypixel/hytale/protocol/ItemWithAllMetadata;
+      97: invokestatic  #515                // Method com/hypixel/hytale/server/core/util/NotificationUtil.sendNotification:(Lcom/hypixel/hytale/server/core/io/PacketHandler;Lcom/hypixel/hytale/server/core/Message;Lcom/hypixel/hytale/server/core/Message;Lcom/hypixel/hytale/protocol/ItemWithAllMetadata;)V
+     100: aload_3
+     101: ifnull        123
+     104: aload_1
+     105: ldc_w         #523                // String SFX_Player_Pickup_Item
+     108: invokestatic  #525                // Method com/hypixel/hytale/server/core/util/TempAssetIdUtil.getSoundEventIndex:(Ljava/lang/String;)I
+     111: getstatic     #529                // Field com/hypixel/hytale/protocol/SoundCategory.UI:Lcom/hypixel/hytale/protocol/SoundCategory;
+     114: aload_3
+     115: aload         4
+     117: invokestatic  #535                // Method com/hypixel/hytale/server/core/universe/world/SoundUtil.playSoundEvent3dToPlayer:(Lcom/hypixel/hytale/component/Ref;ILcom/hypixel/hytale/protocol/SoundCategory;Lcom/hypixel/hytale/math/vector/Vector3d;Lcom/hypixel/hytale/component/ComponentAccessor;)V
+     120: goto          138
+     123: aload_1
+     124: ldc_w         #523                // String SFX_Player_Pickup_Item
+     127: invokestatic  #525                // Method com/hypixel/hytale/server/core/util/TempAssetIdUtil.getSoundEventIndex:(Ljava/lang/String;)I
+     130: getstatic     #529                // Field com/hypixel/hytale/protocol/SoundCategory.UI:Lcom/hypixel/hytale/protocol/SoundCategory;
+     133: aload         4
+     135: invokestatic  #541                // Method com/hypixel/hytale/server/core/universe/world/SoundUtil.playSoundEvent2d:(Lcom/hypixel/hytale/component/Ref;ILcom/hypixel/hytale/protocol/SoundCategory;Lcom/hypixel/hytale/component/ComponentAccessor;)V
+     138: return
+
+  public boolean isOverrideBlockPlacementRestrictions();
+    Code:
+       0: aload_0
+       1: getfield      #545                // Field overrideBlockPlacementRestrictions:Z
+       4: ireturn
+
+  public void setOverrideBlockPlacementRestrictions(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, boolean, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_0
+       1: iload_2
+       2: putfield      #545                // Field overrideBlockPlacementRestrictions:Z
+       5: aload_3
+       6: aload_1
+       7: invokestatic  #306                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      10: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      15: checkcast     #158                // class com/hypixel/hytale/server/core/universe/PlayerRef
+      18: astore        4
+      20: getstatic     #258                // Field $assertionsDisabled:Z
+      23: ifne          39
+      26: aload         4
+      28: ifnonnull     39
+      31: new           #262                // class java/lang/AssertionError
+      34: dup
+      35: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      38: athrow
+      39: aload         4
+      41: invokevirtual #195                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getPacketHandler:()Lcom/hypixel/hytale/server/core/io/PacketHandler;
+      44: new           #548                // class com/hypixel/hytale/protocol/packets/player/SetBlockPlacementOverride
+      47: dup
+      48: iload_2
+      49: invokespecial #550                // Method com/hypixel/hytale/protocol/packets/player/SetBlockPlacementOverride."<init>":(Z)V
+      52: invokevirtual #315                // Method com/hypixel/hytale/server/core/io/PacketHandler.writeNoCache:(Lcom/hypixel/hytale/protocol/Packet;)V
+      55: return
+
+  public void sendMessage(com.hypixel.hytale.server.core.Message);
+    Code:
+       0: aload_0
+       1: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       4: aload_1
+       5: invokevirtual #551                // Method com/hypixel/hytale/server/core/universe/PlayerRef.sendMessage:(Lcom/hypixel/hytale/server/core/Message;)V
+       8: return
+
+  public boolean hasPermission(java.lang.String);
+    Code:
+       0: invokestatic  #555                // Method com/hypixel/hytale/server/core/permissions/PermissionsModule.get:()Lcom/hypixel/hytale/server/core/permissions/PermissionsModule;
+       3: aload_0
+       4: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+       7: aload_1
+       8: invokevirtual #561                // Method com/hypixel/hytale/server/core/permissions/PermissionsModule.hasPermission:(Ljava/util/UUID;Ljava/lang/String;)Z
+      11: ireturn
+
+  public boolean hasPermission(java.lang.String, boolean);
+    Code:
+       0: invokestatic  #555                // Method com/hypixel/hytale/server/core/permissions/PermissionsModule.get:()Lcom/hypixel/hytale/server/core/permissions/PermissionsModule;
+       3: aload_0
+       4: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+       7: aload_1
+       8: iload_2
+       9: invokevirtual #565                // Method com/hypixel/hytale/server/core/permissions/PermissionsModule.hasPermission:(Ljava/util/UUID;Ljava/lang/String;Z)Z
+      12: ireturn
+
+  public void addLocationChange(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, double, double, double, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload         8
+       2: aload_1
+       3: invokestatic  #568                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       6: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      11: checkcast     #569                // class com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent
+      14: astore        9
+      16: getstatic     #258                // Field $assertionsDisabled:Z
+      19: ifne          35
+      22: aload         9
+      24: ifnonnull     35
+      27: new           #262                // class java/lang/AssertionError
+      30: dup
+      31: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      34: athrow
+      35: aload         9
+      37: invokevirtual #571                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.getCollisionPositionOffset:()Lcom/hypixel/hytale/math/vector/Vector3d;
+      40: dload_2
+      41: dload         4
+      43: dload         6
+      45: invokevirtual #574                // Method com/hypixel/hytale/math/vector/Vector3d.add:(DDD)Lcom/hypixel/hytale/math/vector/Vector3d;
+      48: pop
+      49: aload         9
+      51: invokevirtual #578                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.isPendingCollisionCheck:()Z
+      54: ifne          115
+      57: aload         8
+      59: aload_1
+      60: invokestatic  #252                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      63: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      68: checkcast     #253                // class com/hypixel/hytale/server/core/modules/entity/component/TransformComponent
+      71: astore        10
+      73: getstatic     #258                // Field $assertionsDisabled:Z
+      76: ifne          92
+      79: aload         10
+      81: ifnonnull     92
+      84: new           #262                // class java/lang/AssertionError
+      87: dup
+      88: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      91: athrow
+      92: aload         10
+      94: invokevirtual #265                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getPosition:()Lcom/hypixel/hytale/math/vector/Vector3d;
+      97: astore        11
+      99: aload         9
+     101: invokevirtual #581                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.getCollisionStartPosition:()Lcom/hypixel/hytale/math/vector/Vector3d;
+     104: aload         11
+     106: invokevirtual #584                // Method com/hypixel/hytale/math/vector/Vector3d.assign:(Lcom/hypixel/hytale/math/vector/Vector3d;)Lcom/hypixel/hytale/math/vector/Vector3d;
+     109: pop
+     110: aload         9
+     112: invokevirtual #588                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.markPendingCollisionCheck:()V
+     115: return
+
+  public void configTriggerBlockProcessing(boolean, boolean, com.hypixel.hytale.server.core.modules.entity.component.CollisionResultComponent);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: putfield      #591                // Field executeTriggers:Z
+       5: aload_0
+       6: iload_2
+       7: putfield      #594                // Field executeBlockDamage:Z
+      10: iload_1
+      11: ifne          18
+      14: iload_2
+      15: ifeq          28
+      18: aload_3
+      19: invokevirtual #597                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.getCollisionResult:()Lcom/hypixel/hytale/server/core/modules/collision/CollisionResult;
+      22: invokevirtual #601                // Method com/hypixel/hytale/server/core/modules/collision/CollisionResult.enableTriggerBlocks:()V
+      25: goto          35
+      28: aload_3
+      29: invokevirtual #597                // Method com/hypixel/hytale/server/core/modules/entity/component/CollisionResultComponent.getCollisionResult:()Lcom/hypixel/hytale/server/core/modules/collision/CollisionResult;
+      32: invokevirtual #606                // Method com/hypixel/hytale/server/core/modules/collision/CollisionResult.disableTriggerBlocks:()V
+      35: return
+
+  public void resetVelocity(com.hypixel.hytale.server.core.modules.physics.component.Velocity);
+    Code:
+       0: aload_0
+       1: getfield      #67                 // Field velocitySamples:[D
+       4: dconst_0
+       5: invokestatic  #609                // Method java/util/Arrays.fill:([DD)V
+       8: aload_0
+       9: iconst_4
+      10: putfield      #71                 // Field velocitySampleIndex:I
+      13: aload_0
+      14: iconst_0
+      15: putfield      #615                // Field velocitySampleCount:I
+      18: aload_1
+      19: invokevirtual #618                // Method com/hypixel/hytale/server/core/modules/physics/component/Velocity.setZero:()V
+      22: return
+
+  public void processVelocitySample(double, com.hypixel.hytale.math.vector.Vector3d, com.hypixel.hytale.server.core.modules.physics.component.Velocity);
+    Code:
+       0: aload_3
+       1: getfield      #623                // Field com/hypixel/hytale/math/vector/Vector3d.x:D
+       4: dstore        5
+       6: aload_3
+       7: getfield      #627                // Field com/hypixel/hytale/math/vector/Vector3d.y:D
+      10: dstore        7
+      12: aload_3
+      13: getfield      #630                // Field com/hypixel/hytale/math/vector/Vector3d.z:D
+      16: dstore        9
+      18: dload_1
+      19: dconst_0
+      20: dcmpl
+      21: ifne          25
+      24: return
+      25: aload_0
+      26: getfield      #67                 // Field velocitySamples:[D
+      29: aload_0
+      30: getfield      #71                 // Field velocitySampleIndex:I
+      33: dload         5
+      35: dastore
+      36: aload_0
+      37: getfield      #67                 // Field velocitySamples:[D
+      40: aload_0
+      41: getfield      #71                 // Field velocitySampleIndex:I
+      44: iconst_1
+      45: iadd
+      46: dload         7
+      48: dastore
+      49: aload_0
+      50: getfield      #67                 // Field velocitySamples:[D
+      53: aload_0
+      54: getfield      #71                 // Field velocitySampleIndex:I
+      57: iconst_2
+      58: iadd
+      59: dload         9
+      61: dastore
+      62: aload_0
+      63: getfield      #67                 // Field velocitySamples:[D
+      66: aload_0
+      67: getfield      #71                 // Field velocitySampleIndex:I
+      70: iconst_3
+      71: iadd
+      72: dload_1
+      73: dastore
+      74: aload_0
+      75: getfield      #71                 // Field velocitySampleIndex:I
+      78: istore        11
+      80: aload_0
+      81: dup
+      82: getfield      #71                 // Field velocitySampleIndex:I
+      85: iconst_4
+      86: iadd
+      87: putfield      #71                 // Field velocitySampleIndex:I
+      90: aload_0
+      91: getfield      #71                 // Field velocitySampleIndex:I
+      94: bipush        12
+      96: if_icmplt     104
+      99: aload_0
+     100: iconst_4
+     101: putfield      #71                 // Field velocitySampleIndex:I
+     104: aload_0
+     105: getfield      #615                // Field velocitySampleCount:I
+     108: iconst_2
+     109: if_icmpge     122
+     112: aload_0
+     113: dup
+     114: getfield      #615                // Field velocitySampleCount:I
+     117: iconst_1
+     118: iadd
+     119: putfield      #615                // Field velocitySampleCount:I
+     122: aload_0
+     123: getfield      #615                // Field velocitySampleCount:I
+     126: iconst_2
+     127: if_icmpge     136
+     130: aload         4
+     132: invokevirtual #618                // Method com/hypixel/hytale/server/core/modules/physics/component/Velocity.setZero:()V
+     135: return
+     136: iconst_0
+     137: istore        12
+     139: iload         12
+     141: iconst_4
+     142: if_icmpge     159
+     145: aload_0
+     146: getfield      #67                 // Field velocitySamples:[D
+     149: iload         12
+     151: dconst_0
+     152: dastore
+     153: iinc          12, 1
+     156: goto          139
+     159: getstatic     #633                // Field velocitySampleWeights:[[D
+     162: aload_0
+     163: getfield      #615                // Field velocitySampleCount:I
+     166: iconst_2
+     167: isub
+     168: aaload
+     169: astore        12
+     171: iconst_0
+     172: istore        14
+     174: iload         14
+     176: aload_0
+     177: getfield      #615                // Field velocitySampleCount:I
+     180: iconst_1
+     181: isub
+     182: if_icmpge     317
+     185: iload         11
+     187: iconst_4
+     188: isub
+     189: istore        13
+     191: iload         13
+     193: iconst_4
+     194: if_icmpge     201
+     197: bipush        8
+     199: istore        13
+     201: aload         12
+     203: iload         14
+     205: daload
+     206: aload_0
+     207: getfield      #67                 // Field velocitySamples:[D
+     210: iload         11
+     212: iconst_3
+     213: iadd
+     214: daload
+     215: ddiv
+     216: dstore        15
+     218: aload_0
+     219: getfield      #67                 // Field velocitySamples:[D
+     222: iconst_0
+     223: dup2
+     224: daload
+     225: dload         15
+     227: aload_0
+     228: getfield      #67                 // Field velocitySamples:[D
+     231: iload         11
+     233: daload
+     234: aload_0
+     235: getfield      #67                 // Field velocitySamples:[D
+     238: iload         13
+     240: daload
+     241: dsub
+     242: dmul
+     243: dadd
+     244: dastore
+     245: aload_0
+     246: getfield      #67                 // Field velocitySamples:[D
+     249: iconst_1
+     250: dup2
+     251: daload
+     252: dload         15
+     254: aload_0
+     255: getfield      #67                 // Field velocitySamples:[D
+     258: iload         11
+     260: iconst_1
+     261: iadd
+     262: daload
+     263: aload_0
+     264: getfield      #67                 // Field velocitySamples:[D
+     267: iload         13
+     269: iconst_1
+     270: iadd
+     271: daload
+     272: dsub
+     273: dmul
+     274: dadd
+     275: dastore
+     276: aload_0
+     277: getfield      #67                 // Field velocitySamples:[D
+     280: iconst_2
+     281: dup2
+     282: daload
+     283: dload         15
+     285: aload_0
+     286: getfield      #67                 // Field velocitySamples:[D
+     289: iload         11
+     291: iconst_2
+     292: iadd
+     293: daload
+     294: aload_0
+     295: getfield      #67                 // Field velocitySamples:[D
+     298: iload         13
+     300: iconst_2
+     301: iadd
+     302: daload
+     303: dsub
+     304: dmul
+     305: dadd
+     306: dastore
+     307: iload         13
+     309: istore        11
+     311: iinc          14, 1
+     314: goto          174
+     317: aload         4
+     319: aload_0
+     320: getfield      #67                 // Field velocitySamples:[D
+     323: iconst_0
+     324: daload
+     325: aload_0
+     326: getfield      #67                 // Field velocitySamples:[D
+     329: iconst_1
+     330: daload
+     331: aload_0
+     332: getfield      #67                 // Field velocitySamples:[D
+     335: iconst_2
+     336: daload
+     337: invokevirtual #637                // Method com/hypixel/hytale/server/core/modules/physics/component/Velocity.set:(DDD)V
+     340: return
+
+  public static java.util.concurrent.CompletableFuture<com.hypixel.hytale.math.vector.Transform> getRespawnPosition(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, java.lang.String, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_2
+       1: aload_0
+       2: invokestatic  #640                // Method getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      13: astore_3
+      14: getstatic     #258                // Field $assertionsDisabled:Z
+      17: ifne          32
+      20: aload_3
+      21: ifnonnull     32
+      24: new           #262                // class java/lang/AssertionError
+      27: dup
+      28: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      31: athrow
+      32: aload_2
+      33: invokeinterface #468,  1          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getExternalData:()Ljava/lang/Object;
+      38: checkcast     #472                // class com/hypixel/hytale/server/core/universe/world/storage/EntityStore
+      41: invokevirtual #474                // Method com/hypixel/hytale/server/core/universe/world/storage/EntityStore.getWorld:()Lcom/hypixel/hytale/server/core/universe/world/World;
+      44: astore        4
+      46: aload_3
+      47: getfield      #22                 // Field data:Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData;
+      50: astore        5
+      52: aload         5
+      54: aload_1
+      55: invokevirtual #403                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData.getPerWorldData:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerWorldData;
+      58: invokevirtual #641                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerWorldData.getRespawnPoints:()[Lcom/hypixel/hytale/server/core/entity/entities/player/data/PlayerRespawnPointData;
+      61: astore        6
+      63: aload         6
+      65: ifnull        74
+      68: aload         6
+      70: arraylength
+      71: ifne          105
+      74: aload         4
+      76: invokevirtual #645                // Method com/hypixel/hytale/server/core/universe/world/World.getWorldConfig:()Lcom/hypixel/hytale/server/core/universe/world/WorldConfig;
+      79: invokevirtual #649                // Method com/hypixel/hytale/server/core/universe/world/WorldConfig.getSpawnProvider:()Lcom/hypixel/hytale/server/core/universe/world/spawn/ISpawnProvider;
+      82: aload_0
+      83: aload_2
+      84: invokeinterface #655,  3          // InterfaceMethod com/hypixel/hytale/server/core/universe/world/spawn/ISpawnProvider.getSpawnPoint:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentAccessor;)Lcom/hypixel/hytale/math/vector/Transform;
+      89: astore        7
+      91: aload         7
+      93: getstatic     #661                // Field com/hypixel/hytale/math/vector/Vector3f.ZERO:Lcom/hypixel/hytale/math/vector/Vector3f;
+      96: invokevirtual #667                // Method com/hypixel/hytale/math/vector/Transform.setRotation:(Lcom/hypixel/hytale/math/vector/Vector3f;)V
+      99: aload         7
+     101: invokestatic  #673                // Method java/util/concurrent/CompletableFuture.completedFuture:(Ljava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+     104: areturn
+     105: aload_2
+     106: aload_0
+     107: invokestatic  #252                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+     110: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+     115: checkcast     #253                // class com/hypixel/hytale/server/core/modules/entity/component/TransformComponent
+     118: astore        7
+     120: getstatic     #258                // Field $assertionsDisabled:Z
+     123: ifne          139
+     126: aload         7
+     128: ifnonnull     139
+     131: new           #262                // class java/lang/AssertionError
+     134: dup
+     135: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+     138: athrow
+     139: aload         7
+     141: invokevirtual #265                // Method com/hypixel/hytale/server/core/modules/entity/component/TransformComponent.getPosition:()Lcom/hypixel/hytale/math/vector/Vector3d;
+     144: astore        8
+     146: aload         6
+     148: invokestatic  #679                // Method java/util/Arrays.stream:([Ljava/lang/Object;)Ljava/util/stream/Stream;
+     151: aload         8
+     153: invokedynamic #683,  0            // InvokeDynamic #2:compare:(Lcom/hypixel/hytale/math/vector/Vector3d;)Ljava/util/Comparator;
+     158: invokeinterface #687,  2          // InterfaceMethod java/util/stream/Stream.sorted:(Ljava/util/Comparator;)Ljava/util/stream/Stream;
+     163: invokeinterface #693,  1          // InterfaceMethod java/util/stream/Stream.toList:()Ljava/util/List;
+     168: astore        9
+     170: aload_2
+     171: aload_0
+     172: invokestatic  #697                // Method com/hypixel/hytale/server/core/modules/entity/component/BoundingBox.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+     175: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+     180: checkcast     #698                // class com/hypixel/hytale/server/core/modules/entity/component/BoundingBox
+     183: astore        10
+     185: aload         10
+     187: ifnonnull     214
+     190: new           #668                // class com/hypixel/hytale/math/vector/Transform
+     193: dup
+     194: aload         9
+     196: invokeinterface #700,  1          // InterfaceMethod java/util/List.getFirst:()Ljava/lang/Object;
+     201: checkcast     #705                // class com/hypixel/hytale/server/core/entity/entities/player/data/PlayerRespawnPointData
+     204: invokevirtual #707                // Method com/hypixel/hytale/server/core/entity/entities/player/data/PlayerRespawnPointData.getRespawnPosition:()Lcom/hypixel/hytale/math/vector/Vector3d;
+     207: invokespecial #710                // Method com/hypixel/hytale/math/vector/Transform."<init>":(Lcom/hypixel/hytale/math/vector/Vector3d;)V
+     210: invokestatic  #673                // Method java/util/concurrent/CompletableFuture.completedFuture:(Ljava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+     213: areturn
+     214: aload         4
+     216: aload         9
+     218: iconst_0
+     219: aload_0
+     220: aload_3
+     221: aload         10
+     223: invokevirtual #713                // Method com/hypixel/hytale/server/core/modules/entity/component/BoundingBox.getBoundingBox:()Lcom/hypixel/hytale/math/shape/Box;
+     226: invokestatic  #717                // Method tryUseSpawnPoint:(Lcom/hypixel/hytale/server/core/universe/world/World;Ljava/util/List;ILcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/server/core/entity/entities/Player;Lcom/hypixel/hytale/math/shape/Box;)Ljava/util/concurrent/CompletableFuture;
+     229: areturn
+
+  public boolean hasSpawnProtection();
+    Code:
+       0: invokestatic  #836                // Method java/lang/System.nanoTime:()J
+       3: aload_0
+       4: getfield      #841                // Field lastSpawnTimeNanos:J
+       7: lsub
+       8: getstatic     #845                // Field RESPAWN_INVULNERABILITY_TIME_NANOS:J
+      11: lcmp
+      12: ifle          25
+      15: aload_0
+      16: getfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+      19: invokevirtual #848                // Method java/util/concurrent/atomic/AtomicReference.get:()Ljava/lang/Object;
+      22: ifnull        29
+      25: iconst_1
+      26: goto          30
+      29: iconst_0
+      30: ireturn
+
+  public boolean isWaitingForClientReady();
+    Code:
+       0: aload_0
+       1: getfield      #84                 // Field waitingForClientReady:Ljava/util/concurrent/atomic/AtomicReference;
+       4: invokevirtual #848                // Method java/util/concurrent/atomic/AtomicReference.get:()Ljava/lang/Object;
+       7: ifnull        14
+      10: iconst_1
+      11: goto          15
+      14: iconst_0
+      15: ireturn
+
+  public boolean isHiddenFromLivingEntity(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_3
+       1: aload_1
+       2: invokestatic  #400                // Method com/hypixel/hytale/server/core/entity/UUIDComponent.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #401                // class com/hypixel/hytale/server/core/entity/UUIDComponent
+      13: astore        4
+      15: getstatic     #258                // Field $assertionsDisabled:Z
+      18: ifne          34
+      21: aload         4
+      23: ifnonnull     34
+      26: new           #262                // class java/lang/AssertionError
+      29: dup
+      30: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      33: athrow
+      34: aload_3
+      35: aload_2
+      36: invokestatic  #306                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      39: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      44: checkcast     #158                // class com/hypixel/hytale/server/core/universe/PlayerRef
+      47: astore        5
+      49: aload         5
+      51: ifnull        74
+      54: aload         5
+      56: invokevirtual #850                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getHiddenPlayersManager:()Lcom/hypixel/hytale/server/core/entity/entities/player/HiddenPlayersManager;
+      59: aload         4
+      61: invokevirtual #426                // Method com/hypixel/hytale/server/core/entity/UUIDComponent.getUuid:()Ljava/util/UUID;
+      64: invokevirtual #854                // Method com/hypixel/hytale/server/core/entity/entities/player/HiddenPlayersManager.isPlayerHidden:(Ljava/util/UUID;)Z
+      67: ifeq          74
+      70: iconst_1
+      71: goto          75
+      74: iconst_0
+      75: ireturn
+
+  public void setClientViewRadius(int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: putfield      #63                 // Field clientViewRadius:I
+       5: return
+
+  public int getClientViewRadius();
+    Code:
+       0: aload_0
+       1: getfield      #63                 // Field clientViewRadius:I
+       4: ireturn
+
+  public int getViewRadius();
+    Code:
+       0: aload_0
+       1: getfield      #63                 // Field clientViewRadius:I
+       4: invokestatic  #340                // Method com/hypixel/hytale/server/core/HytaleServer.get:()Lcom/hypixel/hytale/server/core/HytaleServer;
+       7: invokevirtual #860                // Method com/hypixel/hytale/server/core/HytaleServer.getConfig:()Lcom/hypixel/hytale/server/core/HytaleServerConfig;
+      10: invokevirtual #864                // Method com/hypixel/hytale/server/core/HytaleServerConfig.getMaxViewRadius:()I
+      13: invokestatic  #869                // Method java/lang/Math.min:(II)I
+      16: ireturn
+
+  public boolean canDecreaseItemStackDurability(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_2
+       1: aload_1
+       2: invokestatic  #640                // Method getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      13: astore_3
+      14: getstatic     #258                // Field $assertionsDisabled:Z
+      17: ifne          32
+      20: aload_3
+      21: ifnonnull     32
+      24: new           #262                // class java/lang/AssertionError
+      27: dup
+      28: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      31: athrow
+      32: aload_3
+      33: getfield      #875                // Field gameMode:Lcom/hypixel/hytale/protocol/GameMode;
+      36: getstatic     #879                // Field com/hypixel/hytale/protocol/GameMode.Creative:Lcom/hypixel/hytale/protocol/GameMode;
+      39: if_acmpeq     46
+      42: iconst_1
+      43: goto          47
+      46: iconst_0
+      47: ireturn
+
+  public boolean canApplyItemStackPenalties(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_2
+       1: aload_1
+       2: invokestatic  #640                // Method getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      13: astore_3
+      14: getstatic     #258                // Field $assertionsDisabled:Z
+      17: ifne          32
+      20: aload_3
+      21: ifnonnull     32
+      24: new           #262                // class java/lang/AssertionError
+      27: dup
+      28: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      31: athrow
+      32: aload_3
+      33: getfield      #875                // Field gameMode:Lcom/hypixel/hytale/protocol/GameMode;
+      36: getstatic     #879                // Field com/hypixel/hytale/protocol/GameMode.Creative:Lcom/hypixel/hytale/protocol/GameMode;
+      39: if_acmpeq     46
+      42: iconst_1
+      43: goto          47
+      46: iconst_0
+      47: ireturn
+
+  public com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction updateItemStackDurability(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.server.core.inventory.ItemStack, com.hypixel.hytale.server.core.inventory.container.ItemContainer, int, double, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: aload_2
+       3: aload_3
+       4: iload         4
+       6: dload         5
+       8: aload         7
+      10: invokespecial #884                // Method com/hypixel/hytale/server/core/entity/LivingEntity.updateItemStackDurability:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/server/core/inventory/ItemStack;Lcom/hypixel/hytale/server/core/inventory/container/ItemContainer;IDLcom/hypixel/hytale/component/ComponentAccessor;)Lcom/hypixel/hytale/server/core/inventory/transaction/ItemStackSlotTransaction;
+      13: astore        8
+      15: aload         8
+      17: ifnull        127
+      20: aload         8
+      22: invokevirtual #888                // Method com/hypixel/hytale/server/core/inventory/transaction/ItemStackSlotTransaction.getSlotAfter:()Lcom/hypixel/hytale/server/core/inventory/ItemStack;
+      25: invokevirtual #894                // Method com/hypixel/hytale/server/core/inventory/ItemStack.isBroken:()Z
+      28: ifeq          127
+      31: aload_2
+      32: invokevirtual #894                // Method com/hypixel/hytale/server/core/inventory/ItemStack.isBroken:()Z
+      35: ifne          127
+      38: aload_2
+      39: invokevirtual #487                // Method com/hypixel/hytale/server/core/inventory/ItemStack.getItem:()Lcom/hypixel/hytale/server/core/asset/type/item/config/Item;
+      42: invokevirtual #493                // Method com/hypixel/hytale/server/core/asset/type/item/config/Item.getTranslationKey:()Ljava/lang/String;
+      45: invokestatic  #498                // Method com/hypixel/hytale/server/core/Message.translation:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/Message;
+      48: astore        9
+      50: aload_0
+      51: ldc_w         #897                // String server.general.repair.itemBroken
+      54: invokestatic  #498                // Method com/hypixel/hytale/server/core/Message.translation:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/Message;
+      57: ldc_w         #899                // String itemName
+      60: aload         9
+      62: invokevirtual #508                // Method com/hypixel/hytale/server/core/Message.param:(Ljava/lang/String;Lcom/hypixel/hytale/server/core/Message;)Lcom/hypixel/hytale/server/core/Message;
+      65: ldc_w         #901                // String #ff5555
+      68: invokevirtual #903                // Method com/hypixel/hytale/server/core/Message.color:(Ljava/lang/String;)Lcom/hypixel/hytale/server/core/Message;
+      71: invokevirtual #726                // Method sendMessage:(Lcom/hypixel/hytale/server/core/Message;)V
+      74: aload         7
+      76: aload_1
+      77: invokestatic  #306                // Method com/hypixel/hytale/server/core/universe/PlayerRef.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      80: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      85: checkcast     #158                // class com/hypixel/hytale/server/core/universe/PlayerRef
+      88: astore        10
+      90: getstatic     #258                // Field $assertionsDisabled:Z
+      93: ifne          109
+      96: aload         10
+      98: ifnonnull     109
+     101: new           #262                // class java/lang/AssertionError
+     104: dup
+     105: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+     108: athrow
+     109: ldc_w         #906                // String SFX_Item_Break
+     112: invokestatic  #525                // Method com/hypixel/hytale/server/core/util/TempAssetIdUtil.getSoundEventIndex:(Ljava/lang/String;)I
+     115: istore        11
+     117: aload         10
+     119: iload         11
+     121: getstatic     #908                // Field com/hypixel/hytale/protocol/SoundCategory.SFX:Lcom/hypixel/hytale/protocol/SoundCategory;
+     124: invokestatic  #911                // Method com/hypixel/hytale/server/core/universe/world/SoundUtil.playSoundEvent2dToPlayer:(Lcom/hypixel/hytale/server/core/universe/PlayerRef;ILcom/hypixel/hytale/protocol/SoundCategory;)V
+     127: aload         8
+     129: areturn
+
+  public com.hypixel.hytale.metrics.MetricResults toMetricResults();
+    Code:
+       0: getstatic     #915                // Field METRICS_REGISTRY:Lcom/hypixel/hytale/metrics/MetricsRegistry;
+       3: aload_0
+       4: invokevirtual #919                // Method com/hypixel/hytale/metrics/MetricsRegistry.toMetricResults:(Ljava/lang/Object;)Lcom/hypixel/hytale/metrics/MetricResults;
+       7: areturn
+
+  public void setLastSpawnTimeNanos(long);
+    Code:
+       0: aload_0
+       1: lload_1
+       2: putfield      #841                // Field lastSpawnTimeNanos:J
+       5: return
+
+  public long getSinceLastSpawnNanos();
+    Code:
+       0: invokestatic  #836                // Method java/lang/System.nanoTime:()J
+       3: aload_0
+       4: getfield      #841                // Field lastSpawnTimeNanos:J
+       7: lsub
+       8: lreturn
+
+  public com.hypixel.hytale.server.core.universe.PlayerRef getPlayerRef();
+    Code:
+       0: aload_0
+       1: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       4: areturn
+
+  public int getMountEntityId();
+    Code:
+       0: aload_0
+       1: getfield      #925                // Field mountEntityId:I
+       4: ireturn
+
+  public void setMountEntityId(int);
+    Code:
+       0: aload_0
+       1: iload_1
+       2: putfield      #925                // Field mountEntityId:I
+       5: return
+
+  public com.hypixel.hytale.protocol.GameMode getGameMode();
+    Code:
+       0: aload_0
+       1: getfield      #875                // Field gameMode:Lcom/hypixel/hytale/protocol/GameMode;
+       4: areturn
+
+  public static void setGameMode(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.protocol.GameMode, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_2
+       1: aload_0
+       2: invokestatic  #458                // Method com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #459                // class com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager
+      13: astore_3
+      14: getstatic     #258                // Field $assertionsDisabled:Z
+      17: ifne          32
+      20: aload_3
+      21: ifnonnull     32
+      24: new           #262                // class java/lang/AssertionError
+      27: dup
+      28: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      31: athrow
+      32: aload_2
+      33: aload_0
+      34: invokestatic  #640                // Method getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      37: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      42: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      45: astore        4
+      47: getstatic     #258                // Field $assertionsDisabled:Z
+      50: ifne          66
+      53: aload         4
+      55: ifnonnull     66
+      58: new           #262                // class java/lang/AssertionError
+      61: dup
+      62: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      65: athrow
+      66: aload         4
+      68: getfield      #875                // Field gameMode:Lcom/hypixel/hytale/protocol/GameMode;
+      71: astore        5
+      73: aload         5
+      75: aload_1
+      76: if_acmpeq     123
+      79: new           #928                // class com/hypixel/hytale/server/core/event/events/ecs/ChangeGameModeEvent
+      82: dup
+      83: aload_1
+      84: invokespecial #930                // Method com/hypixel/hytale/server/core/event/events/ecs/ChangeGameModeEvent."<init>":(Lcom/hypixel/hytale/protocol/GameMode;)V
+      87: astore        6
+      89: aload_2
+      90: aload_0
+      91: aload         6
+      93: invokeinterface #933,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.invoke:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/system/EcsEvent;)V
+      98: aload         6
+     100: invokevirtual #937                // Method com/hypixel/hytale/server/core/event/events/ecs/ChangeGameModeEvent.isCancelled:()Z
+     103: ifeq          107
+     106: return
+     107: aload_0
+     108: aload         6
+     110: invokevirtual #940                // Method com/hypixel/hytale/server/core/event/events/ecs/ChangeGameModeEvent.getGameMode:()Lcom/hypixel/hytale/protocol/GameMode;
+     113: aload_3
+     114: aload_2
+     115: invokestatic  #944                // Method setGameModeInternal:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/protocol/GameMode;Lcom/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager;Lcom/hypixel/hytale/component/ComponentAccessor;)V
+     118: aload_0
+     119: aload_1
+     120: invokestatic  #948                // Method runOnSwitchToGameMode:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/protocol/GameMode;)V
+     123: return
+
+  public static void initGameMode(com.hypixel.hytale.component.Ref<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>, com.hypixel.hytale.component.ComponentAccessor<com.hypixel.hytale.server.core.universe.world.storage.EntityStore>);
+    Code:
+       0: aload_1
+       1: aload_0
+       2: invokestatic  #458                // Method com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager.getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+       5: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      10: checkcast     #459                // class com/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager
+      13: astore_2
+      14: getstatic     #258                // Field $assertionsDisabled:Z
+      17: ifne          32
+      20: aload_2
+      21: ifnonnull     32
+      24: new           #262                // class java/lang/AssertionError
+      27: dup
+      28: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      31: athrow
+      32: aload_1
+      33: aload_0
+      34: invokestatic  #640                // Method getComponentType:()Lcom/hypixel/hytale/component/ComponentType;
+      37: invokeinterface #255,  3          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getComponent:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/component/ComponentType;)Lcom/hypixel/hytale/component/Component;
+      42: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      45: astore_3
+      46: getstatic     #258                // Field $assertionsDisabled:Z
+      49: ifne          64
+      52: aload_3
+      53: ifnonnull     64
+      56: new           #262                // class java/lang/AssertionError
+      59: dup
+      60: invokespecial #264                // Method java/lang/AssertionError."<init>":()V
+      63: athrow
+      64: aload_3
+      65: getfield      #875                // Field gameMode:Lcom/hypixel/hytale/protocol/GameMode;
+      68: astore        4
+      70: aload         4
+      72: ifnonnull     118
+      75: aload_1
+      76: invokeinterface #468,  1          // InterfaceMethod com/hypixel/hytale/component/ComponentAccessor.getExternalData:()Ljava/lang/Object;
+      81: checkcast     #472                // class com/hypixel/hytale/server/core/universe/world/storage/EntityStore
+      84: invokevirtual #474                // Method com/hypixel/hytale/server/core/universe/world/storage/EntityStore.getWorld:()Lcom/hypixel/hytale/server/core/universe/world/World;
+      87: astore        5
+      89: aload         5
+      91: invokevirtual #645                // Method com/hypixel/hytale/server/core/universe/world/World.getWorldConfig:()Lcom/hypixel/hytale/server/core/universe/world/WorldConfig;
+      94: invokevirtual #952                // Method com/hypixel/hytale/server/core/universe/world/WorldConfig.getGameMode:()Lcom/hypixel/hytale/protocol/GameMode;
+      97: astore        4
+      99: getstatic     #216                // Field LOGGER:Lcom/hypixel/hytale/logger/HytaleLogger;
+     102: getstatic     #953                // Field java/util/logging/Level.INFO:Ljava/util/logging/Level;
+     105: invokevirtual #226                // Method com/hypixel/hytale/logger/HytaleLogger.at:(Ljava/util/logging/Level;)Lcom/hypixel/hytale/logger/HytaleLogger$Api;
+     108: ldc_w         #956                // String Assigning default gamemode %s to player!
+     111: aload         4
+     113: invokeinterface #240,  3          // InterfaceMethod com/hypixel/hytale/logger/HytaleLogger$Api.log:(Ljava/lang/String;Ljava/lang/Object;)V
+     118: aload_0
+     119: aload         4
+     121: aload_2
+     122: aload_1
+     123: invokestatic  #944                // Method setGameModeInternal:(Lcom/hypixel/hytale/component/Ref;Lcom/hypixel/hytale/protocol/GameMode;Lcom/hypixel/hytale/server/core/entity/entities/player/movement/MovementManager;Lcom/hypixel/hytale/component/ComponentAccessor;)V
+     126: return
+
+  public int hashCode();
+    Code:
+       0: aload_0
+       1: invokespecial #1074               // Method com/hypixel/hytale/server/core/entity/LivingEntity.hashCode:()I
+       4: istore_1
+       5: bipush        31
+       7: iload_1
+       8: imul
+       9: aload_0
+      10: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      13: ifnull        26
+      16: aload_0
+      17: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      20: invokevirtual #1077               // Method java/util/UUID.hashCode:()I
+      23: goto          27
+      26: iconst_0
+      27: iadd
+      28: istore_1
+      29: iload_1
+      30: ireturn
+
+  public boolean equals(java.lang.Object);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: if_acmpne     7
+       5: iconst_1
+       6: ireturn
+       7: aload_1
+       8: ifnull        22
+      11: aload_0
+      12: invokevirtual #1080               // Method java/lang/Object.getClass:()Ljava/lang/Class;
+      15: aload_1
+      16: invokevirtual #1080               // Method java/lang/Object.getClass:()Ljava/lang/Class;
+      19: if_acmpeq     24
+      22: iconst_0
+      23: ireturn
+      24: aload_0
+      25: aload_1
+      26: invokespecial #1086               // Method com/hypixel/hytale/server/core/entity/LivingEntity.equals:(Ljava/lang/Object;)Z
+      29: ifne          34
+      32: iconst_0
+      33: ireturn
+      34: aload_1
+      35: checkcast     #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      38: astore_2
+      39: aload_0
+      40: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      43: ifnull        60
+      46: aload_0
+      47: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      50: aload_2
+      51: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      54: invokevirtual #1090               // Method java/util/UUID.equals:(Ljava/lang/Object;)Z
+      57: goto          72
+      60: aload_2
+      61: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+      64: ifnonnull     71
+      67: iconst_1
+      68: goto          72
+      71: iconst_0
+      72: ireturn
+
+  public java.lang.String toString();
+    Code:
+       0: aload_0
+       1: invokevirtual #560                // Method getUuid:()Ljava/util/UUID;
+       4: invokestatic  #1091               // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+       7: aload_0
+       8: getfield      #63                 // Field clientViewRadius:I
+      11: aload_0
+      12: invokespecial #1097               // Method com/hypixel/hytale/server/core/entity/LivingEntity.toString:()Ljava/lang/String;
+      15: invokedynamic #1100,  0           // InvokeDynamic #10:makeConcatWithConstants:(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+      20: areturn
+
+  public java.lang.String getDisplayName();
+    Code:
+       0: aload_0
+       1: getfield      #92                 // Field playerRef:Lcom/hypixel/hytale/server/core/universe/PlayerRef;
+       4: invokevirtual #1104               // Method com/hypixel/hytale/server/core/universe/PlayerRef.getUsername:()Ljava/lang/String;
+       7: areturn
+
+  static {};
+    Code:
+       0: ldc           #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+       2: invokevirtual #1168               // Method java/lang/Class.desiredAssertionStatus:()Z
+       5: ifne          12
+       8: iconst_1
+       9: goto          13
+      12: iconst_0
+      13: putstatic     #258                // Field $assertionsDisabled:Z
+      16: new           #920                // class com/hypixel/hytale/metrics/MetricsRegistry
+      19: dup
+      20: invokespecial #1173               // Method com/hypixel/hytale/metrics/MetricsRegistry."<init>":()V
+      23: ldc_w         #1174               // String Uuid
+      26: invokedynamic #1176,  0           // InvokeDynamic #12:apply:()Ljava/util/function/Function;
+      31: getstatic     #1177               // Field com/hypixel/hytale/codec/Codec.UUID_STRING:Lcom/hypixel/hytale/codec/function/FunctionCodec;
+      34: invokevirtual #1183               // Method com/hypixel/hytale/metrics/MetricsRegistry.register:(Ljava/lang/String;Ljava/util/function/Function;Lcom/hypixel/hytale/codec/Codec;)Lcom/hypixel/hytale/metrics/MetricsRegistry;
+      37: ldc_w         #1187               // String ClientViewRadius
+      40: invokedynamic #1189,  0           // InvokeDynamic #13:apply:()Ljava/util/function/Function;
+      45: getstatic     #1190               // Field com/hypixel/hytale/codec/Codec.INTEGER:Lcom/hypixel/hytale/codec/codecs/simple/IntegerCodec;
+      48: invokevirtual #1183               // Method com/hypixel/hytale/metrics/MetricsRegistry.register:(Ljava/lang/String;Ljava/util/function/Function;Lcom/hypixel/hytale/codec/Codec;)Lcom/hypixel/hytale/metrics/MetricsRegistry;
+      51: putstatic     #915                // Field METRICS_REGISTRY:Lcom/hypixel/hytale/metrics/MetricsRegistry;
+      54: new           #1194               // class com/hypixel/hytale/codec/KeyedCodec
+      57: dup
+      58: ldc_w         #1196               // String PlayerData
+      61: getstatic     #1198               // Field com/hypixel/hytale/server/core/entity/entities/player/data/PlayerConfigData.CODEC:Lcom/hypixel/hytale/codec/builder/BuilderCodec;
+      64: invokespecial #1202               // Method com/hypixel/hytale/codec/KeyedCodec."<init>":(Ljava/lang/String;Lcom/hypixel/hytale/codec/Codec;)V
+      67: putstatic     #1205               // Field PLAYER_CONFIG_DATA:Lcom/hypixel/hytale/codec/KeyedCodec;
+      70: ldc           #1                  // class com/hypixel/hytale/server/core/entity/entities/Player
+      72: invokedynamic #1209,  0           // InvokeDynamic #14:get:()Ljava/util/function/Supplier;
+      77: getstatic     #1212               // Field com/hypixel/hytale/server/core/entity/LivingEntity.CODEC:Lcom/hypixel/hytale/codec/builder/BuilderCodec;
+      80: invokestatic  #1213               // Method com/hypixel/hytale/codec/builder/BuilderCodec.builder:(Ljava/lang/Class;Ljava/util/function/Supplier;Lcom/hypixel/hytale/codec/builder/BuilderCodec;)Lcom/hypixel/hytale/codec/builder/BuilderCodec$Builder;
+      83: getstatic     #1205               // Field PLAYER_CONFIG_DATA:Lcom/hypixel/hytale/codec/KeyedCodec;
+      86: invokedynamic #1219,  0           // InvokeDynamic #15:accept:()Ljava/util/function/BiConsumer;
+      91: invokedynamic #1222,  0           // InvokeDynamic #16:apply:()Ljava/util/function/Function;
+      96: invokevirtual #1223               // Method com/hypixel/hytale/codec/builder/BuilderCodec$Builder.append:(Lcom/hypixel/hytale/codec/KeyedCodec;Ljava/util/function/BiConsumer;Ljava/util/function/Function;)Lcom/hypixel/hytale/codec/builder/BuilderField$FieldBuilder;
+      99: invokevirtual #1229               // Method com/hypixel/hytale/codec/builder/BuilderField$FieldBuilder.add:()Lcom/hypixel/hytale/codec/builder/BuilderCodec$BuilderBase;
+     102: checkcast     #1224               // class com/hypixel/hytale/codec/builder/BuilderCodec$Builder
+     105: new           #1194               // class com/hypixel/hytale/codec/KeyedCodec
+     108: dup
+     109: ldc_w         #1234               // String BlockPlacementOverride
+     112: getstatic     #1236               // Field com/hypixel/hytale/codec/Codec.BOOLEAN:Lcom/hypixel/hytale/codec/codecs/simple/BooleanCodec;
+     115: invokespecial #1202               // Method com/hypixel/hytale/codec/KeyedCodec."<init>":(Ljava/lang/String;Lcom/hypixel/hytale/codec/Codec;)V
+     118: invokedynamic #1240,  0           // InvokeDynamic #17:accept:()Ljava/util/function/BiConsumer;
+     123: invokedynamic #1241,  0           // InvokeDynamic #18:apply:()Ljava/util/function/Function;
+     128: invokevirtual #1223               // Method com/hypixel/hytale/codec/builder/BuilderCodec$Builder.append:(Lcom/hypixel/hytale/codec/KeyedCodec;Ljava/util/function/BiConsumer;Ljava/util/function/Function;)Lcom/hypixel/hytale/codec/builder/BuilderField$FieldBuilder;
+     131: invokevirtual #1229               // Method com/hypixel/hytale/codec/builder/BuilderField$FieldBuilder.add:()Lcom/hypixel/hytale/codec/builder/BuilderCodec$BuilderBase;
+     134: checkcast     #1224               // class com/hypixel/hytale/codec/builder/BuilderCodec$Builder
+     137: new           #1194               // class com/hypixel/hytale/codec/KeyedCodec
+     140: dup
+     141: ldc_w         #1242               // String HotbarManager
+     144: getstatic     #1244               // Field com/hypixel/hytale/server/core/entity/entities/player/HotbarManager.CODEC:Lcom/hypixel/hytale/codec/builder/BuilderCodec;
+     147: invokespecial #1202               // Method com/hypixel/hytale/codec/KeyedCodec."<init>":(Ljava/lang/String;Lcom/hypixel/hytale/codec/Codec;)V
+     150: invokedynamic #1245,  0           // InvokeDynamic #19:accept:()Ljava/util/function/BiConsumer;
+     155: invokedynamic #1246,  0           // InvokeDynamic #20:apply:()Ljava/util/function/Function;
+     160: invokevirtual #1223               // Method com/hypixel/hytale/codec/builder/BuilderCodec$Builder.append:(Lcom/hypixel/hytale/codec/KeyedCodec;Ljava/util/function/BiConsumer;Ljava/util/function/Function;)Lcom/hypixel/hytale/codec/builder/BuilderField$FieldBuilder;
+     163: invokevirtual #1229               // Method com/hypixel/hytale/codec/builder/BuilderField$FieldBuilder.add:()Lcom/hypixel/hytale/codec/builder/BuilderCodec$BuilderBase;
+     166: checkcast     #1224               // class com/hypixel/hytale/codec/builder/BuilderCodec$Builder
+     169: new           #1194               // class com/hypixel/hytale/codec/KeyedCodec
+     172: dup
+     173: ldc_w         #1247               // String GameMode
+     176: getstatic     #1249               // Field com/hypixel/hytale/server/core/codec/ProtocolCodecs.GAMEMODE_LEGACY:Lcom/hypixel/hytale/codec/codecs/EnumCodec;
+     179: invokespecial #1202               // Method com/hypixel/hytale/codec/KeyedCodec."<init>":(Ljava/lang/String;Lcom/hypixel/hytale/codec/Codec;)V
+     182: invokedynamic #1255,  0           // InvokeDynamic #21:accept:()Ljava/util/function/BiConsumer;
+     187: invokedynamic #1256,  0           // InvokeDynamic #22:apply:()Ljava/util/function/Function;
+     192: invokedynamic #1257,  0           // InvokeDynamic #23:accept:()Ljava/util/function/BiConsumer;
+     197: invokevirtual #1258               // Method com/hypixel/hytale/codec/builder/BuilderCodec$Builder.appendInherited:(Lcom/hypixel/hytale/codec/KeyedCodec;Ljava/util/function/BiConsumer;Ljava/util/function/Function;Ljava/util/function/BiConsumer;)Lcom/hypixel/hytale/codec/builder/BuilderField$FieldBuilder;
+     200: ldc_w         #1262               // String The last known game-mode of the entity.
+     203: invokevirtual #1264               // Method com/hypixel/hytale/codec/builder/BuilderField$FieldBuilder.documentation:(Ljava/lang/String;)Lcom/hypixel/hytale/codec/builder/BuilderField$FieldBuilder;
+     206: invokevirtual #1229               // Method com/hypixel/hytale/codec/builder/BuilderField$FieldBuilder.add:()Lcom/hypixel/hytale/codec/builder/BuilderCodec$BuilderBase;
+     209: checkcast     #1224               // class com/hypixel/hytale/codec/builder/BuilderCodec$Builder
+     212: invokevirtual #1268               // Method com/hypixel/hytale/codec/builder/BuilderCodec$Builder.build:()Lcom/hypixel/hytale/codec/builder/BuilderCodec;
+     215: putstatic     #1272               // Field CODEC:Lcom/hypixel/hytale/codec/builder/BuilderCodec;
+     218: getstatic     #328                // Field java/util/concurrent/TimeUnit.MILLISECONDS:Ljava/util/concurrent/TimeUnit;
+     221: ldc2_w        #1273               // long 3000l
+     224: invokevirtual #1275               // Method java/util/concurrent/TimeUnit.toNanos:(J)J
+     227: putstatic     #845                // Field RESPAWN_INVULNERABILITY_TIME_NANOS:J
+     230: iconst_2
+     231: anewarray     #1279               // class "[D"
+     234: dup
+     235: iconst_0
+     236: iconst_1
+     237: newarray       double
+     239: dup
+     240: iconst_0
+     241: dconst_1
+     242: dastore
+     243: aastore
+     244: dup
+     245: iconst_1
+     246: iconst_2
+     247: newarray       double
+     249: dup
+     250: iconst_0
+     251: ldc2_w        #1280               // double 0.9d
+     254: dastore
+     255: dup
+     256: iconst_1
+     257: ldc2_w        #1282               // double 0.1d
+     260: dastore
+     261: aastore
+     262: putstatic     #633                // Field velocitySampleWeights:[[D
+     265: return
+}

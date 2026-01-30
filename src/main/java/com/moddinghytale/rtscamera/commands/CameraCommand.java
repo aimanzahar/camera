@@ -14,6 +14,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.moddinghytale.rtscamera.camera.CameraManager;
 import com.moddinghytale.rtscamera.camera.CameraMode;
+import com.moddinghytale.rtscamera.input.ClickToMoveHandler;
 import com.moddinghytale.rtscamera.player.PlayerStateManager;
 
 import java.util.Locale;
@@ -26,14 +27,16 @@ public class CameraCommand extends AbstractPlayerCommand {
 
     private final PlayerStateManager stateManager;
     private final CameraManager cameraManager;
+    private final ClickToMoveHandler clickToMoveHandler;
     private final DefaultArg<String> modeArg;
 
-    public CameraCommand(PlayerStateManager stateManager, CameraManager cameraManager) {
+    public CameraCommand(PlayerStateManager stateManager, CameraManager cameraManager, ClickToMoveHandler clickToMoveHandler) {
         super("rtscam", "Manage RTS camera modes. Usage: /rtscam [reset|fp|tp|rts]");
         this.setPermissionGroup(GameMode.Adventure);
         this.setAllowsExtraArguments(true);
         this.stateManager = stateManager;
         this.cameraManager = cameraManager;
+        this.clickToMoveHandler = clickToMoveHandler;
         this.modeArg = withDefaultArg("mode", "Camera mode (reset/fp/tp/rts)", ArgTypes.STRING, "", "");
     }
 
@@ -48,11 +51,17 @@ public class CameraCommand extends AbstractPlayerCommand {
         switch (subCommand) {
             case "reset", "fp", "first", "firstperson", "1" -> {
                 stateManager.setMode(uuid, CameraMode.FIRST_PERSON);
+                if (clickToMoveHandler != null) {
+                    clickToMoveHandler.cancelMove(uuid);
+                }
                 cameraManager.applyMode(playerRef, CameraMode.FIRST_PERSON);
                 ctx.sendMessage(Message.raw("[RTSCamera] Switched to FIRST_PERSON."));
             }
             case "tp", "third", "thirdperson", "2" -> {
                 stateManager.setMode(uuid, CameraMode.THIRD_PERSON);
+                if (clickToMoveHandler != null) {
+                    clickToMoveHandler.cancelMove(uuid);
+                }
                 cameraManager.applyMode(playerRef, CameraMode.THIRD_PERSON);
                 ctx.sendMessage(Message.raw("[RTSCamera] Switched to THIRD_PERSON."));
             }

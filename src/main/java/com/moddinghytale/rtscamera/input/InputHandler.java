@@ -55,6 +55,9 @@ public class InputHandler {
                     LOGGER.atInfo().log("[RTSCamera:Input] Middle-click detected! Cycling %s -> %s for player %s",
                             mode, newMode, playerRef.getUsername());
                     cameraManager.applyMode(playerRef, newMode);
+                    if (newMode != CameraMode.RTS) {
+                        clickToMoveHandler.cancelMove(uuid);
+                    }
                     event.setCancelled(true);
                     return;
                 }
@@ -68,7 +71,7 @@ public class InputHandler {
                     LOGGER.atInfo().log("[RTSCamera:Input] Left-click in RTS mode. targetBlock=%s",
                             targetBlock != null ? "(" + targetBlock.x + "," + targetBlock.y + "," + targetBlock.z + ")" : "null");
                     if (targetBlock != null) {
-                        clickToMoveHandler.movePlayerTo(player, targetBlock);
+                        clickToMoveHandler.movePlayerTo(player, playerRef, targetBlock);
                         event.setCancelled(true);
                     }
                 }

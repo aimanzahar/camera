@@ -15,6 +15,8 @@ public class PluginConfig {
     private float thirdPersonDistance = 8.0f;
     private float rtsDistance = 20.0f;
     private float cameraLerpSpeed = 0.2f;
+    private float rtsMoveSpeed = 4.0f;
+    private float rtsStopDistance = 0.6f;
     private boolean clickToMoveEnabled = true;
     private boolean middleClickCycleEnabled = true;
 
@@ -43,6 +45,14 @@ public class PluginConfig {
 
     public float getCameraLerpSpeed() {
         return cameraLerpSpeed;
+    }
+
+    public float getRtsMoveSpeed() {
+        return rtsMoveSpeed;
+    }
+
+    public float getRtsStopDistance() {
+        return rtsStopDistance;
     }
 
     public boolean isClickToMoveEnabled() {

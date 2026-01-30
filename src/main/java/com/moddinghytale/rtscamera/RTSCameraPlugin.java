@@ -18,6 +18,7 @@ public class RTSCameraPlugin extends JavaPlugin {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private PlayerStateManager stateManager;
+    private ClickToMoveHandler clickToMoveHandler;
 
     public RTSCameraPlugin(JavaPluginInit init) {
         super(init);
@@ -30,8 +31,9 @@ public class RTSCameraPlugin extends JavaPlugin {
 
         try {
             PluginConfig config = PluginConfig.load();
-            LOGGER.atInfo().log("[RTSCamera] Config loaded: thirdPersonDist=%.1f, rtsDist=%.1f, lerpSpeed=%.2f, clickToMove=%b, middleClickCycle=%b",
+            LOGGER.atInfo().log("[RTSCamera] Config loaded: thirdPersonDist=%.1f, rtsDist=%.1f, lerpSpeed=%.2f, moveSpeed=%.2f, stopDist=%.2f, clickToMove=%b, middleClickCycle=%b",
                     config.getThirdPersonDistance(), config.getRtsDistance(), config.getCameraLerpSpeed(),
+                    config.getRtsMoveSpeed(), config.getRtsStopDistance(),
                     config.isClickToMoveEnabled(), config.isMiddleClickCycleEnabled());
 
             stateManager = new PlayerStateManager();
@@ -41,13 +43,13 @@ public class RTSCameraPlugin extends JavaPlugin {
             CameraManager cameraManager = new CameraManager(presets);
             LOGGER.atInfo().log("[RTSCamera] CameraManager created.");
 
-            ClickToMoveHandler clickToMoveHandler = new ClickToMoveHandler();
+            clickToMoveHandler = new ClickToMoveHandler(config);
 
             InputHandler inputHandler = new InputHandler(stateManager, cameraManager, clickToMoveHandler, config);
             inputHandler.register(getEventRegistry());
             LOGGER.atInfo().log("[RTSCamera] InputHandler registered with EventRegistry.");
 
-            CameraCommand cameraCommand = new CameraCommand(stateManager, cameraManager);
+            CameraCommand cameraCommand = new CameraCommand(stateManager, cameraManager, clickToMoveHandler);
             getCommandRegistry().registerCommand(cameraCommand);
             LOGGER.atInfo().log("[RTSCamera] /rtscam command registered.");
 
@@ -55,6 +57,9 @@ public class RTSCameraPlugin extends JavaPlugin {
                 PlayerRef playerRef = event.getPlayerRef();
                 LOGGER.atInfo().log("[RTSCamera] Player disconnected: %s", playerRef.getUuid());
                 stateManager.removePlayer(playerRef.getUuid());
+                if (clickToMoveHandler != null) {
+                    clickToMoveHandler.cancelMove(playerRef.getUuid());
+                }
             });
             LOGGER.atInfo().log("[RTSCamera] PlayerDisconnectEvent listener registered.");
 
@@ -62,6 +67,13 @@ public class RTSCameraPlugin extends JavaPlugin {
             LOGGER.atInfo().log("[RTSCamera] Middle-click to cycle: FIRST_PERSON -> THIRD_PERSON -> RTS");
         } catch (Exception e) {
             LOGGER.atSevere().withCause(e).log("[RTSCamera] FATAL ERROR during setup!");
+        }
+    }
+
+    @Override
+    protected void shutdown() {
+        if (clickToMoveHandler != null) {
+            clickToMoveHandler.shutdown();
         }
     }
 }

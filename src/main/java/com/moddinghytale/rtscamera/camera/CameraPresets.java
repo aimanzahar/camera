@@ -42,9 +42,9 @@ public class CameraPresets {
         s.rotationLerpSpeed = config.getCameraLerpSpeed();
         s.distance = config.getRtsDistance();
         s.displayCursor = true;
+        s.sendMouseMotion = true;
         s.isFirstPerson = false;
         s.movementForceRotationType = MovementForceRotationType.Custom;
-        s.movementForceRotation = new Direction(-0.7853981634f, 0.0f, 0.0f);
         s.eyeOffset = true;
         s.positionDistanceOffsetType = PositionDistanceOffsetType.DistanceOffset;
         s.rotationType = RotationType.Custom;
