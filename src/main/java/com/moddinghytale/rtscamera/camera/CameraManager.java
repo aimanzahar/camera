@@ -1,11 +1,14 @@
 package com.moddinghytale.rtscamera.camera;
 
-import hytale.server.world.entity.player.Player;
-import hytale.server.world.entity.player.PlayerRef;
-import hytale.shared.net.protocol.client.play.SetServerCamera;
-import hytale.shared.world.entity.player.camera.ClientCameraView;
+import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.ClientCameraView;
+import com.hypixel.hytale.protocol.ServerCameraSettings;
+import com.hypixel.hytale.protocol.packets.camera.SetServerCamera;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 
 public class CameraManager {
+
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final CameraPresets presets;
 
@@ -13,29 +16,53 @@ public class CameraManager {
         this.presets = presets;
     }
 
-    public void applyMode(Player player, CameraMode mode) {
-        PlayerRef playerRef = player.getReference();
-        if (playerRef == null) return;
-
-        if (mode == CameraMode.FIRST_PERSON) {
-            resetCamera(player);
+    public void applyMode(PlayerRef playerRef, CameraMode mode) {
+        if (playerRef == null) {
+            LOGGER.atWarning().log("[RTSCamera:Camera] applyMode called with null playerRef!");
             return;
         }
 
-        var settings = presets.buildSettings(mode);
-        if (settings == null) return;
+        LOGGER.atInfo().log("[RTSCamera:Camera] Applying mode %s to player %s", mode, playerRef.getUsername());
 
-        playerRef.getPacketHandler().writeNoCache(
-                new SetServerCamera(ClientCameraView.Custom, true, settings)
-        );
+        if (mode == CameraMode.FIRST_PERSON) {
+            resetCamera(playerRef);
+            return;
+        }
+
+        ServerCameraSettings settings = presets.buildSettings(mode);
+        if (settings == null) {
+            LOGGER.atWarning().log("[RTSCamera:Camera] buildSettings returned null for mode %s", mode);
+            return;
+        }
+
+        LOGGER.atInfo().log("[RTSCamera:Camera] Sending SetServerCamera packet: view=Custom, locked=true, distance=%.1f, cursor=%b, firstPerson=%b",
+                settings.distance, settings.displayCursor, settings.isFirstPerson);
+
+        try {
+            playerRef.getPacketHandler().writeNoCache(
+                    new SetServerCamera(ClientCameraView.Custom, true, settings)
+            );
+            LOGGER.atInfo().log("[RTSCamera:Camera] Packet sent successfully for mode %s", mode);
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("[RTSCamera:Camera] Error sending camera packet!");
+        }
     }
 
-    public void resetCamera(Player player) {
-        PlayerRef playerRef = player.getReference();
-        if (playerRef == null) return;
+    public void resetCamera(PlayerRef playerRef) {
+        if (playerRef == null) {
+            LOGGER.atWarning().log("[RTSCamera:Camera] resetCamera called with null playerRef!");
+            return;
+        }
 
-        playerRef.getPacketHandler().writeNoCache(
-                new SetServerCamera(ClientCameraView.Custom, false, null)
-        );
+        LOGGER.atInfo().log("[RTSCamera:Camera] Resetting camera to default for player %s", playerRef.getUsername());
+
+        try {
+            playerRef.getPacketHandler().writeNoCache(
+                    new SetServerCamera(ClientCameraView.Custom, false, null)
+            );
+            LOGGER.atInfo().log("[RTSCamera:Camera] Reset packet sent successfully.");
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("[RTSCamera:Camera] Error sending reset packet!");
+        }
     }
 }

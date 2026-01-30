@@ -1,13 +1,13 @@
 package com.moddinghytale.rtscamera.camera;
 
+import com.hypixel.hytale.protocol.Direction;
+import com.hypixel.hytale.protocol.MouseInputType;
+import com.hypixel.hytale.protocol.MovementForceRotationType;
+import com.hypixel.hytale.protocol.PositionDistanceOffsetType;
+import com.hypixel.hytale.protocol.RotationType;
+import com.hypixel.hytale.protocol.ServerCameraSettings;
+import com.hypixel.hytale.protocol.Vector3f;
 import com.moddinghytale.rtscamera.config.PluginConfig;
-import hytale.server.world.entity.player.camera.ServerCameraSettings;
-import hytale.shared.math.Direction;
-import hytale.shared.math.Vector3f;
-import hytale.shared.world.entity.player.camera.MouseInputType;
-import hytale.shared.world.entity.player.camera.MovementForceRotationType;
-import hytale.shared.world.entity.player.camera.PositionDistanceOffsetType;
-import hytale.shared.world.entity.player.camera.RotationType;
 
 public class CameraPresets {
 
